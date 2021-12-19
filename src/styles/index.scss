@@ -1,0 +1,15 @@
+@import './constance.scss';
+
+* {
+  box-sizing: border-box;
+  padding: 0; margin: 0;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: $BackgroundColor;
+}
