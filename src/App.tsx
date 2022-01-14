@@ -1,11 +1,11 @@
-import RouterView from '@/components/Route'
+import RouteView from '@/components/RouterGuard';
+// import { useRoutes } from 'react-router-dom'
+// import routers from '@/router/index'
 
 function App() {
-  return (
-    <>
-      <RouterView />
-    </>
-  );
+  return <RouteView />
+  // const element = useRoutes(routers)
+  // return <>{element}</>
 }
 
 export default App;

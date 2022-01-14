@@ -1,16 +1,14 @@
-import React, { lazy, LazyExoticComponent } from 'react'
+import { lazy } from 'react'
 
-interface RouteInterface {
-  path: string
-  component?: LazyExoticComponent<() => JSX.Element> | JSX.Element | any
-  redeact?: string | React.Component,
-  children?: Array<RouteInterface>
-}
+import menu from './menu'
+
+import { RouteInterface } from '@/types/router'
 
 const route: Array<RouteInterface> = [
   {
     path: '/',
-    component: lazy(() => import('@/layout/default'))
+    component: lazy(() => import('@/layout/default')),
+    children: menu
   }
 ]
 
