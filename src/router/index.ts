@@ -1,12 +1,13 @@
 import React, { lazy, LazyExoticComponent } from 'react'
 
-interface Route {
+interface RouteInterface {
   path: string
   component?: LazyExoticComponent<() => JSX.Element> | JSX.Element | any
-  redeact?: string | React.Component
+  redeact?: string | React.Component,
+  children?: Array<RouteInterface>
 }
 
-const route: Array<Route> = [
+const route: Array<RouteInterface> = [
   {
     path: '/',
     component: lazy(() => import('@/layout/default'))
