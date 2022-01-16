@@ -1,10 +1,28 @@
 import { Suspense } from 'react';
-import { Routes, Route } from 'react-router';
+import { Routes, Route, Navigate } from 'react-router';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
 import routers from '@/router/index'
+import { generateRoute } from './helper'
 import { RouteInterface } from '@/types/router'
+
+const generateElement:any = (route:RouteInterface) => {
+  return (
+    !route.redeact ?
+    (
+      <Suspense fallback={<LazyLoading />}>
+        <route.component />
+      </Suspense>
+    ) : 
+    (
+      // <Navigate to={route.redeact} />
+      <>...</>
+    )
+  )
+}
+
+let auth = false
 
 // 只渲染对应的Route,外层需要用Routes包裹
 const renderRoute:any = (routes:Array<RouteInterface>) => {
@@ -16,9 +34,7 @@ const renderRoute:any = (routes:Array<RouteInterface>) => {
           key={item.path}
           path={item.path}
           element={
-            <Suspense fallback={<LazyLoading />}>
-              <item.component />
-            </Suspense>
+            generateElement(item)
           }
         >
           {/* 嵌套路由 */}
@@ -33,8 +49,9 @@ function RouteView () {
   return (
     <Routes>
       {
-        renderRoute(routers)
+        renderRoute(generateRoute(routers))
       }
+      <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   )
 }
