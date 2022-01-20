@@ -1,18 +1,31 @@
-import { Outlet, Link } from 'react-router-dom'
-import menu from '@/router/menu'
-function Layout () {
+import { Outlet } from 'react-router-dom'
+import { Layout } from 'antd';
+
+import SiderNav from './components/SiderNav'
+
+const {Sider, Header, Content} = Layout
+
+function DefaultLayout () {
   return (
-    <div className='default-layout'>
-      {
-        menu.map(item => {
-          return (
-            <Link key={item.path} to={item.path}>{item.meta.title}</Link>
-          )
-        })
-      }
-      <Outlet />
-    </div>
+    <div id='page'>
+        <Layout>
+          <Sider collapsible
+            trigger={null}
+          >
+            <SiderNav />
+          </Sider>
+          <Layout>
+            <Header style={{background: '#fff', padding: '0 16px'}}>
+              header
+              {/* <HeaderBar collapsed={this.state.collapsed} onToggle={this.toggle}/> */}
+            </Header>
+            <Content>
+              <Outlet />
+            </Content>
+          </Layout>
+        </Layout>
+      </div>
   )
 }
 
-export default Layout
+export default DefaultLayout
