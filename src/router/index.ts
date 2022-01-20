@@ -8,8 +8,11 @@ const route: Array<RouteInterface> = [
   {
     path: '/',
     component: lazy(() => import('@/layout/default')),
-    redeact: '/home',
     children: menu
+  },
+  {
+    path: '/login',
+    component: lazy(() => import('@/views/Login')),
   }
 ]
 
