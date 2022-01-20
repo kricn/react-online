@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router';
+import { Routes, Route, Navigate, useLocation } from 'react-router';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
@@ -7,18 +7,13 @@ import routers from '@/router/index'
 import { generateRoute } from './helper'
 import { RouteInterface } from '@/types/router'
 
-const generateElement:any = (route:RouteInterface) => {
+const useElement:any = (route:RouteInterface) => {
   return (
-    !route.redeact ?
     (
       <Suspense fallback={<LazyLoading />}>
-        <route.component />
+        <route.component {...route} />
       </Suspense>
-    ) : 
-    (
-      // <Navigate to={route.redeact} />
-      <>...</>
-    )
+    ) 
   )
 }
 
@@ -34,7 +29,7 @@ const renderRoute:any = (routes:Array<RouteInterface>) => {
           key={item.path}
           path={item.path}
           element={
-            generateElement(item)
+            useElement(item)
           }
         >
           {/* 嵌套路由 */}
@@ -51,7 +46,7 @@ function RouteView () {
       {
         renderRoute(generateRoute(routers))
       }
-      <Route path="*" element={<Navigate to="/home" />} />
+      <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   )
 }
