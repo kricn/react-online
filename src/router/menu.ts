@@ -1,5 +1,4 @@
 import { lazy } from 'react'
-import { Navigate } from 'react-router'
 import { RouteInterface } from '@/types/router'
 
 const menu:Array<RouteInterface> = [
@@ -7,7 +6,10 @@ const menu:Array<RouteInterface> = [
     path: '',
     index: true,
     to: 'home',
-    component: lazy(() => import('@/components/Redirect'))
+    component: lazy(() => import('@/components/Redirect')),
+    meta: {
+      hidden: true
+    }
   },
   {
     path: 'home',

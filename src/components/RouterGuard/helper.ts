@@ -1,16 +1,5 @@
 
-
-
-import { Suspense } from 'react';
-import { Route } from 'react-router';
-
-import LazyLoading from '@/components/UnitComponent/LazyLoading';
-
 import { RouteInterface } from '@/types/router'
-
-const checkAuth = (route: RouteInterface, auth: any) => {
-  
-}
 
 let auth = true
 

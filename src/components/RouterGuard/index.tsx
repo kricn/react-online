@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router';
+import { Routes, Route, Navigate } from 'react-router';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
@@ -16,8 +16,6 @@ const useElement:any = (route:RouteInterface) => {
     ) 
   )
 }
-
-let auth = false
 
 // 只渲染对应的Route,外层需要用Routes包裹
 const renderRoute:any = (routes:Array<RouteInterface>) => {
