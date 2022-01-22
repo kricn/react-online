@@ -8,7 +8,7 @@ const { SubMenu } = Menu
 
 const renderMenu = (routes:Array<RouteInterface>)=> {
   return (
-    <Menu>
+    <Menu theme="dark">
       {
         routes.map(route => {
           if (!route.children) return renderFirstMenu(route)

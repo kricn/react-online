@@ -10,8 +10,7 @@ module.exports = {
   },
   babel: {
     plugins: [
-      ['import', { libraryName: 'antd', style: true }]
+      ['import', { libraryName: 'antd', style: true, libraryDirectory: 'es' }]
     ]
-  },
-  plugins: []
+  }
 }
