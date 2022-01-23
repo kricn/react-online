@@ -23,7 +23,23 @@ const menu:Array<RouteInterface> = [
     component: lazy(() => import('@/views/About')),
     meta: {
       title: '关于'
-    }
+    },
+    children: [
+      {
+        path: 'test',
+        component: lazy(() => import('@/views/User')),
+        meta: {
+          title: '关于下的子菜单'
+        }
+      },
+      {
+        path: 'test2',
+        component: lazy(() => import('@/views/User')),
+        meta: {
+          title: '关于下的子菜单2'
+        }
+      }
+    ]
   },
   {
     path: 'user',

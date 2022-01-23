@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router'
+
 import menus from '@/router/menu'
 
 import { RouteInterface } from '@/types/router'
@@ -8,11 +10,11 @@ const { SubMenu } = Menu
 
 const renderMenu = (routes:Array<RouteInterface>)=> {
   return (
-    <Menu theme="dark">
+    <Menu theme="dark" mode="inline">
       {
         routes.map(route => {
-          if (!route.children) return renderFirstMenu(route)
-          if (route.children.length === 1) return renderFirstMenu(route.children[0])
+          if (!route.children) return useFirstMenu(route)
+          if (route.children.length === 1) return useFirstMenu(route.children[0])
           if (route.children.length > 1) return renderMultMenu(route)
           return ''
         })
@@ -21,18 +23,24 @@ const renderMenu = (routes:Array<RouteInterface>)=> {
   )
 }
 
-const renderFirstMenu = (route: RouteInterface) => {
+const useFirstMenu = (route: RouteInterface) => {
+  let navigate = useNavigate()
+
+  const toPage = (path:string) => {
+    navigate(path)
+  }
+
   return (
-    !route?.meta?.hidden ? <Menu.Item key={route.path}>{route?.meta?.title}</Menu.Item> : ''
+    !route?.meta?.hidden ? <Menu.Item key={route.path} onClick={() => toPage(route.path)}>{route?.meta?.title}</Menu.Item> : ''
   )
 }
 
 const renderMultMenu = (subRoute: RouteInterface) => {
   return (
-    <SubMenu title={subRoute.meta.title}>
+    <SubMenu title={subRoute.meta.title} key={subRoute.path}>
       {
         subRoute.children?.map(item => {
-          return renderFirstMenu(item)
+          return useFirstMenu(item)
         })
       }
     </SubMenu>

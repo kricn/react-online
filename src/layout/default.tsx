@@ -5,7 +5,7 @@ import SiderNav from './components/SiderNav'
 
 const style = require('./default.module.scss');
 
-const {Sider, Header, Content} = Layout
+const { Sider, Header, Content } = Layout
 
 function DefaultLayout () {
   return (
