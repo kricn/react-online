@@ -26,14 +26,14 @@ const menu:Array<RouteInterface> = [
     },
     children: [
       {
-        path: 'test',
+        path: '/about/test',
         component: lazy(() => import('@/views/User')),
         meta: {
           title: '关于下的子菜单'
         }
       },
       {
-        path: 'test2',
+        path: '/about/test2',
         component: lazy(() => import('@/views/User')),
         meta: {
           title: '关于下的子菜单2'
