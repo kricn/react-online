@@ -12,14 +12,14 @@ const menu:Array<RouteInterface> = [
     }
   },
   {
-    path: 'home',
+    path: '/home',
     component: lazy(() => import('@/views/Home')),
     meta: {
       title: '首页'
     }
   },
   {
-    path: 'about',
+    path: '/about',
     component: lazy(() => import('@/views/About')),
     meta: {
       title: '关于'
@@ -42,7 +42,7 @@ const menu:Array<RouteInterface> = [
     ]
   },
   {
-    path: 'user',
+    path: '/user',
     component: lazy(() => import('@/views/User')),
     meta: {
       title: '个人中心',
