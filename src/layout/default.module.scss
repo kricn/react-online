@@ -1,4 +1,19 @@
 :global(.ant-layout) {
   height: 100%;
   overflow: auto;
+  :global(.ant-layout-sider) {
+    position: relative;
+    .trigger {
+      position: absolute;
+      right: -25px; top: 10px;
+      color: #000;
+      display: inline-block;
+      width: 20px; height: 20px;
+      line-height: 20px;
+      text-align: center;
+      z-index: 99;
+      cursor: pointer;
+    }
+  }
+  
 }
