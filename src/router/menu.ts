@@ -1,6 +1,10 @@
 import { lazy } from 'react'
 import { RouteInterface } from '@/types/router'
 
+import {
+  HomeOutlined
+} from '@ant-design/icons'
+
 const menu:Array<RouteInterface> = [
   {
     path: '',
@@ -15,14 +19,16 @@ const menu:Array<RouteInterface> = [
     path: '/home',
     component: lazy(() => import('@/views/Home')),
     meta: {
-      title: '首页'
+      title: '首页',
+      icon: HomeOutlined
     }
   },
   {
     path: '/about',
     component: lazy(() => import('@/views/About')),
     meta: {
-      title: '关于'
+      title: '关于',
+      icon: HomeOutlined
     },
     children: [
       {
@@ -46,6 +52,7 @@ const menu:Array<RouteInterface> = [
     component: lazy(() => import('@/views/User')),
     meta: {
       title: '个人中心',
+      icon: HomeOutlined,
       auth: true
     }
   }
