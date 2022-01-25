@@ -9,6 +9,7 @@ import {
 
 // 自定义
 import SiderNav from './components/SiderNav'
+import HeaderBar from './components/HeaderBar';
 
 // 样式
 const style = require('./default.module.scss').default;
@@ -25,15 +26,15 @@ function DefaultLayout () {
   return (
     <Layout>
       <Sider collapsible trigger={null} collapsed={collapsed} >
+        <div className={style.logo}></div>
         <SiderNav />
         <div className={style.trigger} onClick={() => toggleCollapsed ()}>
           { collapsed ? <MenuFoldOutlined /> : <MenuUnfoldOutlined /> }
         </div>
       </Sider>
       <Layout>
-        <Header style={{background: '#fff', padding: '0 16px'}}>
-          header
-          {/* <HeaderBar collapsed={this.state.collapsed} onToggle={this.toggle}/> */}
+        <Header>
+          <HeaderBar />
         </Header>
         <Content>
           <Outlet />
