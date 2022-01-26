@@ -13,6 +13,10 @@ const route: Array<RouteInterface> = [
   {
     path: '/login',
     component: lazy(() => import('@/views/Login')),
+  },
+  {
+    path: '/404',
+    component: lazy(() => import('@/views/404'))
   }
 ]
 
