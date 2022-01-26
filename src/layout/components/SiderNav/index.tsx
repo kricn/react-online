@@ -1,15 +1,17 @@
 import { useNavigate, useLocation } from 'react-router'
 
 import menus from '@/router/menu'
+import { inject, observer } from 'mobx-react'
 
 import { RouteInterface } from '@/types/router'
+import { generateRoute } from '@/components/RouterGuard/helper'
 
 import { Menu } from 'antd'
 
 const { SubMenu } = Menu
 
 
-function SiderNav() {
+function SiderNav({ appStore }: any) {
   
   const navigate = useNavigate()
   const location = useLocation()
@@ -70,7 +72,7 @@ function SiderNav() {
       </SubMenu>
     )
   }
-  return renderMenu(menus);
+  return renderMenu(generateRoute(menus, appStore.isLogin));
 }
 
-export default SiderNav
+export default inject('appStore')(observer(SiderNav))
