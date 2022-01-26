@@ -1,17 +1,14 @@
 
 import { RouteInterface } from '@/types/router'
 
-let auth = true
+import { deepCopy } from '@/utils';
 
-const generateRoute:any = (routes:Array<RouteInterface>) => {
-  return routes.filter(item => {
-    if (item.children?.length) item.children = generateRoute(item.children)
+const generateRoute:any = (routes:Array<RouteInterface>, isLogin: boolean = false, userInfo: any = {}) => {
+  const temp: Array<RouteInterface> = deepCopy(routes)
+  return temp.filter(item => {
+    if (item.children?.length) item.children = generateRoute(item.children, isLogin)
     const { meta } = item
-    if (!auth && meta?.auth) {
-      return false
-    } else {
-      return true
-    }
+    return meta?.auth && !isLogin ? false : true
   })
 }
 

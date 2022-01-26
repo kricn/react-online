@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import { inject, observer } from 'mobx-react'
 
@@ -6,27 +6,11 @@ import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
 import routers from '@/router/index'
 import { RouteInterface } from '@/types/router'
-import { deepCopy } from '@/utils';
+import { generateRoute } from './helper'
 // import { useAsyncState } from '../UseAsyncState';
 
 
-const generateRoute:any = (routes:Array<RouteInterface>, isLogin: boolean = false, userInfo: any = {}) => {
-  const temp: Array<RouteInterface> = deepCopy(routes)
-  return temp.filter(item => {
-    if (item.children?.length) item.children = generateRoute(item.children, isLogin)
-    const { meta } = item
-    return meta?.auth && !isLogin ? false : true
-  })
-}
-
 function RouteView ( {appStore}: any) {
-
-  const [isLogin, setIsLogin] = useState(appStore.isLogin)
-
-  useEffect(() => {
-    setIsLogin(appStore.isLogin)
-    console.log(isLogin)
-  }, [appStore.isLogin, isLogin])
 
   // 渲染路由对应的组件
   const renderElement:any = (route:RouteInterface) => {
@@ -63,9 +47,9 @@ function RouteView ( {appStore}: any) {
   return (
     <Routes>
       {
-        renderRoute(generateRoute(routers, isLogin))
+        renderRoute(generateRoute(routers, appStore.isLogin))
       }
-      <Route path="*" element={<Navigate to="/login" />} />
+      <Route path="*" element={<Navigate to="/404" />} />
     </Routes>
   )
 }
