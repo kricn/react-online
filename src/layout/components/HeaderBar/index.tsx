@@ -6,20 +6,22 @@ import { useEffect } from 'react';
 const style = require('./index.module.scss').default
 
 function HeaderBar({ appStore }: any) {
+
   useEffect(() => {
-    let timer:any = setTimeout(() => {
-      appStore.toggleLogin(true)
-    }, 2000);
+    console.log('aaa')
+    // let timer: NodeJS.Timeout = setTimeout(() => {
+    //   appStore.toggleLogin(false)
+    // }, 2000)
 
     // let timer2:any = setTimeout(() => {
     //   appStore.toggleLogin(false)
     // }, 5000);
 
     return () => {
-      clearTimeout(timer)
+      // timer && clearTimeout(timer)
       // clearTimeout(timer2)
     }
-  })
+  }, [appStore])
   return (
     <div className={`flex fvertical ${style.header}`}>
       <div className={style.username}>用户名{appStore.isLogin ? '已登录' : '未登录'}</div>

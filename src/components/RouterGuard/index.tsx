@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router';
+import { Suspense, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router';
 import { inject, observer } from 'mobx-react'
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
@@ -10,7 +10,19 @@ import { generateRoute } from './helper'
 // import { useAsyncState } from '../UseAsyncState';
 
 
+import DefaultLayout from '@/layout/default';
+import Home from '@/views/Home'
+import User from '@/views/User';
+import About from '@/views/About';
+
+
 function RouteView ( {appStore}: any) {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    !appStore.isLogin && navigate('/login')
+  }, [appStore.isLogin, navigate])
 
   // 渲染路由对应的组件
   const renderElement:any = (route:RouteInterface) => {
@@ -22,12 +34,13 @@ function RouteView ( {appStore}: any) {
       ) 
     )
   }
-  
+
   // 只渲染对应的Route,外层需要用Routes包裹
   const renderRoute:any = (routes:Array<RouteInterface>) => {
     return (
       routes.map(item => {
         return (
+          !item?.meta?.hidden ?
           <Route
             {...item}
             key={item.path}
@@ -38,7 +51,7 @@ function RouteView ( {appStore}: any) {
           >
             {/* 嵌套路由 */}
             {item.children?.length ? renderRoute(item.children) : ''}
-          </Route>
+          </Route> : ''
         )
       })
     )
@@ -47,8 +60,13 @@ function RouteView ( {appStore}: any) {
   return (
     <Routes>
       {
-        renderRoute(generateRoute(routers, appStore.isLogin))
+        renderRoute(generateRoute(routers))
       }
+      {/* <Route path="/" element={<DefaultLayout />}>
+        <Route path="/home" element={<Home />}></Route>
+        <Route path="/user" element={<User />}></Route>
+        <Route path="/about/test" element={<About />}></Route>
+      </Route> */}
       <Route path="*" element={<Navigate to="/404" />} />
     </Routes>
   )
