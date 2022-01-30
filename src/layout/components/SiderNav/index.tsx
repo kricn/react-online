@@ -63,7 +63,7 @@ function SiderNav({ appStore }: any) {
   // 渲染多级惨淡
   const renderMultMenu = (subRoute: RouteInterface) => {
     return (
-      <SubMenu title={subRoute.meta.title} key={subRoute.path} icon={subRoute.meta?.icon ? <subRoute.meta.icon /> : ''}>
+      <SubMenu title={subRoute.meta?.title} key={subRoute.path} icon={subRoute.meta?.icon ? <subRoute.meta.icon /> : ''}>
         {
           subRoute.children?.map(item => {
             return renderFirstMenu(item)
