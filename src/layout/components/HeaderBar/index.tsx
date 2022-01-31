@@ -8,7 +8,6 @@ const style = require('./index.module.scss').default
 function HeaderBar({ appStore }: any) {
 
   useEffect(() => {
-    console.log('aaa')
     // let timer: NodeJS.Timeout = setTimeout(() => {
     //   appStore.toggleLogin(false)
     // }, 2000)

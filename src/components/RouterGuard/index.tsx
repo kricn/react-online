@@ -10,12 +10,6 @@ import { generateRoute } from './helper'
 // import { useAsyncState } from '../UseAsyncState';
 
 
-import DefaultLayout from '@/layout/default';
-import Home from '@/views/Home'
-import User from '@/views/User';
-import About from '@/views/About';
-
-
 function RouteView ( {appStore}: any) {
 
   const navigate = useNavigate()
@@ -60,13 +54,8 @@ function RouteView ( {appStore}: any) {
   return (
     <Routes>
       {
-        renderRoute(generateRoute(routers))
+        renderRoute(generateRoute(routers, appStore.isLogin))
       }
-      {/* <Route path="/" element={<DefaultLayout />}>
-        <Route path="/home" element={<Home />}></Route>
-        <Route path="/user" element={<User />}></Route>
-        <Route path="/about/test" element={<About />}></Route>
-      </Route> */}
       <Route path="*" element={<Navigate to="/404" />} />
     </Routes>
   )
