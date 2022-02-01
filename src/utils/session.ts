@@ -34,3 +34,14 @@ function _setCookie (name: string, value: string, expire: number=10) {
   document.cookie = name + '=' + value + '; path=/' +
     (expire ? ';expires=' + date.toUTCString() : '')
 }
+
+/** token 方法 */
+const LOGIN_TOKEN_NAME = 'token'
+
+export const getToken = ():string => {
+  return sessionStorage.getItem(LOGIN_TOKEN_NAME) || ''
+}
+
+export const setToken = (token:string) => {
+  sessionStorage.setItem(LOGIN_TOKEN_NAME, token)
+}
