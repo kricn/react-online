@@ -9,11 +9,8 @@ const menu:Array<RouteInterface> = [
   {
     path: '',
     index: true,
-    to: 'home',
-    component: lazy(() => import('@/components/UnitComponent/Redirect')),
-    meta: {
-      hidden: true
-    }
+    to: '/home',
+    component: lazy(() => import('@/components/UnitComponent/Redirect'))
   },
   {
     path: '/home',
