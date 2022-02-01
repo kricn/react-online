@@ -16,10 +16,15 @@ const generateRoute:any = (routes:Array<RouteInterface>, isLogin: boolean = fals
    */
 
   return routes.map(item => {
-    if (item?.children?.length) item.children = generateRoute(item.children, isLogin)
+    if (item?.children?.length) item.children = generateRoute(item.children, isLogin, userInfo)
     if (!item.meta) item.meta = {}
-    if (item?.meta?.auth && !isLogin) {
+    // 隐藏需要登录的路由
+    if (item.meta?.auth && !isLogin) {
       item.meta.hidden = true
+    }
+    // 放开已有权限的路由
+    if (item.meta?.auth && isLogin) {
+      item.meta.hidden = false
     }
     return item
   })

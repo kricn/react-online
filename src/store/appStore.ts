@@ -15,7 +15,7 @@ class AppStore {
     makeObservable(this)
   }
 
-  @observable isLogin: Boolean = true  //利用cookie来判断用户是否登录，避免刷新页面后登录状态丢失
+  @observable isLogin: Boolean = false  //利用cookie来判断用户是否登录，避免刷新页面后登录状态丢失
   @observable users: Users[] = []  //用户数据库
   @observable userInfo: UserInfo = {}  //当前登录用户信息
 
