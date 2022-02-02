@@ -21,10 +21,12 @@ const generateRoute:any = (routes:Array<RouteInterface>, isLogin: boolean = fals
     // 隐藏需要登录的路由
     if (item.meta?.auth && !isLogin) {
       item.meta.hidden = true
+      item.meta.noRender = true
     }
     // 放开已有权限的路由
     if (item.meta?.auth && isLogin) {
       item.meta.hidden = false
+      item.meta.noRender = false
     }
     return item
   })

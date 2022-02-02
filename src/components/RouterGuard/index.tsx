@@ -1,5 +1,5 @@
 import { Suspense, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router';
 import { inject, observer } from 'mobx-react'
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
@@ -9,23 +9,29 @@ import { RouteInterface } from '@/types/router'
 import { generateRoute } from './helper'
 // import { useAsyncState } from '../UseAsyncState';
 
+import { getToken } from '@/utils/session'
+
 
 function RouteView ( {appStore}: any) {
 
-  const navigate = useNavigate()
-
+  // 判断是否已经登录过
   useEffect(() => {
-    !appStore.isLogin && navigate('/login')
-  }, [appStore.isLogin, navigate])
+    if(getToken()) {
+      appStore.toggleLogin(true)
+      return ;
+    }
+  }, [])
 
   // 渲染路由对应的组件
-  const renderElement:any = (route:RouteInterface) => {
+  const renderElement = (route:RouteInterface):any => {
     return (
+      // 不支持渲染的，则跳转到对应配置的路径或404
+      !route?.meta?.noRender ?
       (
         <Suspense fallback={<LazyLoading />}>
           <route.component {...route} />
         </Suspense>
-      ) 
+      ) : <Navigate to={route?.to || '/404'} />
     )
   }
 
@@ -34,7 +40,6 @@ function RouteView ( {appStore}: any) {
     return (
       routes.map(item => {
         return (
-          !item?.meta?.hidden ?
           <Route
             {...item}
             key={item.path}
@@ -45,7 +50,7 @@ function RouteView ( {appStore}: any) {
           >
             {/* 嵌套路由 */}
             {item.children?.length ? renderRoute(item.children) : ''}
-          </Route> : ''
+          </Route>
         )
       })
     )
