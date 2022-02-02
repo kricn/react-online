@@ -3,6 +3,7 @@ import { Form, Button, Input } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { useNavigate } from 'react-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { setToken } from '@/utils/session';
 
 const style = require('./index.module.scss').default
 
@@ -27,6 +28,7 @@ function Login({appStore}: any) {
 
   const onSubmit = () => {
     appStore.toggleLogin(true)
+    setToken('kricn')
     navigate('/')
   }
 
