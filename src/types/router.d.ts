@@ -1,10 +1,11 @@
 import {  LazyExoticComponent } from 'React'
 
 interface MetaInterface {
-  title?: string
-  hidden?: boolean
-  icon?: any
-  auth?: boolean
+  title?: string  // 路由标题
+  hidden?: boolean // 是否在菜单栏中隐藏
+  icon?: any // 菜单icon
+  auth?: boolean // 是否需要权限
+  noRender?: boolean // 是否不渲染这个路由
 }
 
 export interface RouteInterface {
