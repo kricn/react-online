@@ -32,7 +32,7 @@ function SiderNav({ appStore }: any) {
       <Menu 
         theme="dark" 
         mode="inline"
-        defaultSelectedKeys={[location.pathname]}
+        selectedKeys={[location.pathname]}
         defaultOpenKeys={getOpenKey(location.pathname)}
       >
         {
