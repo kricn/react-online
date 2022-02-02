@@ -8,7 +8,11 @@ const route: Array<RouteInterface> = [
   {
     path: '/',
     component: lazy(() => import('@/layout/default')),
-    children: menu
+    children: menu,
+    to: '/login',
+    meta: {
+      auth: true
+    }
   },
   {
     path: '/login',

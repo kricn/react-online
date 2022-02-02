@@ -10,7 +10,10 @@ const menu:Array<RouteInterface> = [
     path: '',
     index: true,
     to: '/home',
-    component: lazy(() => import('@/components/UnitComponent/Redirect'))
+    component: lazy(() => import('@/components/UnitComponent/Redirect')),
+    meta: {
+      hidden: true
+    }
   },
   {
     path: '/home',
