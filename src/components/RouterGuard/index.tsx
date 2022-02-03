@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router';
 import { inject, observer } from 'mobx-react'
 
@@ -14,13 +14,13 @@ import { getToken } from '@/utils/session'
 
 function RouteView ( {appStore}: any) {
 
+  const [loading, setLoading] = useState(true)
+
   // 判断是否已经登录过
   useEffect(() => {
-    if(getToken()) {
-      appStore.toggleLogin(true)
-      return ;
-    }
-  }, [])
+    getToken() ? appStore.toggleLogin(true) : appStore.toggleLogin(false)
+    setLoading(false)
+  }, [loading])
 
   // 渲染路由对应的组件
   const renderElement = (route:RouteInterface):any => {
@@ -57,12 +57,19 @@ function RouteView ( {appStore}: any) {
   }
 
   return (
-    <Routes>
-      {
-        renderRoute(generateRoute(routers, appStore.isLogin))
-      }
-      <Route path="*" element={<Navigate to="/404" />} />
-    </Routes>
+    loading ? 
+    <>
+      loading
+    </>
+    :
+    (
+      <Routes>
+        {
+          renderRoute(generateRoute(routers, appStore.isLogin))
+        }
+        <Route path="*" element={<Navigate to="/404" />} />
+      </Routes>
+    )
   )
 }
 
