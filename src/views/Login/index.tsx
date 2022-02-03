@@ -7,11 +7,6 @@ import { setToken } from '@/utils/session';
 
 const style = require('./index.module.scss').default
 
-interface LoginForm {
-  username: string
-  password: string
-}
-
 // 表单 col 大小
 const labelCol = 4
 
