@@ -45,3 +45,7 @@ export const getToken = ():string => {
 export const setToken = (token:string) => {
   sessionStorage.setItem(LOGIN_TOKEN_NAME, token)
 }
+
+export const removeToken = () => {
+  sessionStorage.removeItem(LOGIN_TOKEN_NAME)
+}
