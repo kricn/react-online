@@ -2,7 +2,7 @@
 import {observable, action, makeObservable} from 'mobx'
 
 interface UserInfo {
-
+  username?: string
 }
 
 interface Users {
