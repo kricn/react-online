@@ -22,8 +22,9 @@ function Login({appStore}: any) {
   const navigate = useNavigate()
 
   const onSubmit = () => {
-    appStore.toggleLogin(true)
-    setToken('kricn')
+    const username = form.getFieldValue('username')
+    appStore.toggleLogin(true, {username})
+    setToken(username)
     navigate('/')
   }
 
@@ -33,7 +34,7 @@ function Login({appStore}: any) {
         <Form
           className={style.form}
           name="form"
-          initialValues={form}
+          form={form}
           labelAlign='left'
           labelCol={{span: labelCol}}
           onFinish={onSubmit}
