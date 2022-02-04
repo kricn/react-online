@@ -51,12 +51,8 @@ function SiderNav({ appStore }: any) {
   // 渲染一级菜单
   const renderFirstMenu = (route: RouteInterface) => {
   
-    const toPage = (path:string) => {
-      navigate(path)
-    }
-  
     return (
-      !route?.meta?.hidden ? <Menu.Item icon={route.meta?.icon ? <route.meta.icon /> : ''} key={route.path} onClick={() => toPage(route.path)}>{route?.meta?.title}</Menu.Item> : ''
+      !route?.meta?.hidden ? <Menu.Item icon={route.meta?.icon ? <route.meta.icon /> : ''} key={route.path} onClick={() => navigate(route.path)}>{route?.meta?.title}</Menu.Item> : ''
     )
   }
   
