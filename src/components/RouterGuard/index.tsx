@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router';
+import { Routes, Route, Navigate } from 'react-router';
 import { inject, observer } from 'mobx-react'
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
@@ -20,7 +20,7 @@ function RouteView ( {appStore}: any) {
   useEffect(() => {
     getToken() ? appStore.toggleLogin(true) : appStore.toggleLogin(false)
     setLoading(false)
-  }, [loading])
+  }, [loading, appStore])
 
   // 渲染路由对应的组件
   const renderElement = (route:RouteInterface):any => {
