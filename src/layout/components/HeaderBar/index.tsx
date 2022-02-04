@@ -23,7 +23,7 @@ function HeaderBar({ appStore }: any) {
     <div className={`flex fvertical ${style.header}`}>
       <Dropdown overlay={menu}>
         <div className='flex fvertical pointer'>
-          <div className={style.username}>用户名{appStore.isLogin ? '已登录' : '未登录'}</div>
+          <div className={style.username}>{appStore.userInfo.username || '用户未登录'}</div>
           {/* <div className='note'></div> */}
           <div className={`${style.avatar} mgl_20`}>
             <img src="https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2019/11/26/16ea83b0a0fe25a6~tplv-t2oaga2asx-no-mark:100:100:100:100.awebp" alt="avatar" />
