@@ -2,6 +2,7 @@
 import { Outlet } from 'react-router-dom'
 import { Layout } from 'antd';
 import { useState } from 'react';
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -37,7 +38,15 @@ function DefaultLayout () {
           <HeaderBar />
         </Header>
         <Content>
-          <Outlet />
+          <SwitchTransition mode="out-in">
+            <CSSTransition 
+              className={style.btn}
+              timeout={500}
+              key="route"
+            >
+              <Outlet />
+            </CSSTransition>
+          </SwitchTransition>
         </Content>
       </Layout>
     </Layout>

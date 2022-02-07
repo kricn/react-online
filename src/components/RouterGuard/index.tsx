@@ -1,6 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import { inject, observer } from 'mobx-react'
+import { CSSTransition, SwitchTransition } from 'react-transition-group';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
@@ -63,12 +64,20 @@ function RouteView ( {appStore}: any) {
     </>
     :
     (
-      <Routes>
-        {
-          renderRoute(generateRoute(routers, appStore.isLogin))
-        }
-        <Route path="*" element={<Navigate to="/404" />} />
-      </Routes>
+      <SwitchTransition mode="out-in">
+        <CSSTransition 
+          className="router"
+          timeout={500}
+          key="route"
+        >
+          <Routes>
+          {
+            renderRoute(generateRoute(routers, appStore.isLogin))
+          }
+          <Route path="*" element={<Navigate to="/404" />} />
+        </Routes>
+        </CSSTransition>
+        </SwitchTransition>
     )
   )
 }
