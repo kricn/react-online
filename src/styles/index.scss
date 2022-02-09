@@ -86,24 +86,23 @@ img {
   object-fit: cover;
 }
 
-.router-enter {
-  transform: translate(100%, 0);
-  opacity: 0;
+.router-enter,
+.router-exit {
+  transition: 500ms ease-out;
 }
 
-.router-enter-active {
-  transform: translate(0, 0);
-  opacity: 1;
-  transition: all 500ms;
+.router-enter {
+  transform: translateX(100%);
+}
+
+.router-enter.router-enter-active {
+  transform: translateX(0%);
 }
 
 .router-exit {
-  transform: translate(0, 0);
-  opacity: 1;
+  transform: translateX(0%);
 }
 
 .router-exit-active {
-  transform: translate(-100%, 0);
-  opacity: 0;
-  transition: all 500ms;
+  transform: translateX(-100%);
 }
