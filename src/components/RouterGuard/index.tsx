@@ -59,11 +59,7 @@ function RouteView ( {appStore}: any) {
   }
 
   return (
-    loading ? 
-    <>
-      loading
-    </>
-    :
+    loading ? <LazyLoading /> :
     (
       <TransitionGroup>
         {/* <SwitchTransition mode="out-in"> */}
