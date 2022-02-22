@@ -1,14 +1,12 @@
 import { Suspense, useEffect, useState } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router';
+import { Routes, Route, Navigate } from 'react-router';
 import { inject, observer } from 'mobx-react'
-import { TransitionGroup, CSSTransition, SwitchTransition } from 'react-transition-group';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
 import routers from '@/router/index'
 import { RouteInterface } from '@/types/router'
 import { generateRoute } from './helper'
-// import { useAsyncState } from '../UseAsyncState';
 
 import { getToken } from '@/utils/session'
 
@@ -16,7 +14,6 @@ import { getToken } from '@/utils/session'
 function RouteView ( {appStore}: any) {
 
   const [loading, setLoading] = useState(true)
-  const location = useLocation()
 
   // 判断是否已经登录过
   useEffect(() => {
@@ -61,22 +58,10 @@ function RouteView ( {appStore}: any) {
   return (
     loading ? <LazyLoading /> :
     (
-      <TransitionGroup>
-        {/* <SwitchTransition mode="out-in"> */}
-        <CSSTransition 
-          className="router"
-          timeout={500}
-          key={location.key}
-        >
-          <Routes>
-          {
-            renderRoute(generateRoute(routers, appStore.isLogin))
-          }
-          <Route path="*" element={<Navigate to="/404" />} />
-        </Routes>
-        </CSSTransition>
-        {/* </SwitchTransition> */}
-      </TransitionGroup>
+      <Routes>
+        { renderRoute(generateRoute(routers, appStore.isLogin)) }
+        <Route path="*" element={<Navigate to="/404" />} />
+      </Routes>
     )
   )
 }
