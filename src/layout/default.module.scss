@@ -23,5 +23,7 @@
   :global(.ant-layout-header) {
     background: #fff;
   }
-  
+  :global(.ant-layout-content) {
+    overflow-x: hidden;
+  }
 }
