@@ -1,5 +1,5 @@
 // 第三方
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import { Layout } from 'antd';
 import { useState } from 'react';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
@@ -19,6 +19,7 @@ const { Sider, Header, Content } = Layout
 
 function DefaultLayout () {
   const [collapsed, setcollapsed] = useState(false)
+  const location = useLocation()
 
   const toggleCollapsed = () => {
     setcollapsed(!collapsed)
@@ -40,9 +41,11 @@ function DefaultLayout () {
         <Content>
           <SwitchTransition mode="out-in">
             <CSSTransition 
-              className={style.btn}
+              classNames="router"
+              key={location.pathname}
               timeout={500}
-              key="route"
+              appear
+              unmountOnExit
             >
               <Outlet />
             </CSSTransition>
