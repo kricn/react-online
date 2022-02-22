@@ -1,0 +1,35 @@
+.container {
+  .box {
+    width: 100px;
+    height: 100px;
+    background-color: aquamarine;
+  }
+  .redBox {
+    @extend .box;
+    background-color: brown;
+  }
+
+  /** animation */
+  .box-enter {
+    transform: translate(100%, 0);
+    opacity: 0;
+  }
+  
+  .box-enter-active {
+    transform: translate(0, 0);
+    opacity: 1;
+    transition: all 500ms;
+  }
+  
+  .box-exit {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  
+  .box-exit-active {
+    transform: translate(-100%, 0);
+    opacity: 0;
+    transition: all 500ms;
+  }
+  
+}
