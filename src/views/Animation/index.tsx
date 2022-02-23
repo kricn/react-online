@@ -1,37 +1,27 @@
 
-import { useState } from 'react';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
-
-import { Button } from 'antd'
-
+import { useEffect, useState } from 'react'
+import TransitionWrapper from './components/TransitionWrapper'
 import style from './index.module.scss'
 
 export default function Anaimation() {
 
-  const [isShowBox, setIsShowBox] = useState(true)
-
-  const toggleBoxStatus = () => {
-    setIsShowBox(!!!isShowBox)
-  }
-
   return (
     <div className={style.container}>
-      <SwitchTransition mode="out-in">
+      {/* <SwitchTransition mode="out-in">
         <CSSTransition
-          classNames={{
-            enterActive: style['box-enter-active'],
-            enter: style['box-enter'],
-            exitActive: style['box-exit-active'],
-            exit: style['box-exit'],
-          }}
-          timeout={500}
-          key={isShowBox ? 'show' : 'unshow'}
+          classNames={`pointer ${isHover ? 'fade-sildeX' : ''}`}
+          timeout={300}
+          key={isHover ? 'in' : 'out'}
           appear
         >
-          <div className={style.box}>{isShowBox ? 'true' : 'false'}</div>
+          <div className={style.box} onMouseEnter={toggleBoxStatus} onMouseOut={toggleBoxStatus}></div>
         </CSSTransition>
-      </SwitchTransition>
-      <Button type="primary" onClick={toggleBoxStatus}>switch box status</Button>
+      </SwitchTransition> */}
+      <TransitionWrapper
+        classNames='fade-sildeX'
+      >
+        <div className={`${style.box}`}></div>
+      </TransitionWrapper>
     </div>
   )
 }
