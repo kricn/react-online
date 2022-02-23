@@ -1,8 +1,7 @@
 // 第三方
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, } from 'react-router-dom'
 import { Layout } from 'antd';
 import { useState } from 'react';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -19,7 +18,6 @@ const { Sider, Header, Content } = Layout
 
 function DefaultLayout () {
   const [collapsed, setcollapsed] = useState(false)
-  const location = useLocation()
 
   const toggleCollapsed = () => {
     setcollapsed(!collapsed)
@@ -39,17 +37,7 @@ function DefaultLayout () {
           <HeaderBar />
         </Header>
         <Content>
-          <SwitchTransition mode="out-in">
-            <CSSTransition 
-              classNames="router"
-              key={location.pathname}
-              timeout={500}
-              appear
-              unmountOnExit
-            >
-              <Outlet />
-            </CSSTransition>
-          </SwitchTransition>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
