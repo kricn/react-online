@@ -1,5 +1,4 @@
 
-import { useEffect, useState } from 'react'
 import TransitionWrapper from './components/TransitionWrapper'
 import style from './index.module.scss'
 
