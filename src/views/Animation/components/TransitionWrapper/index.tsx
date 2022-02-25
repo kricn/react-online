@@ -23,7 +23,11 @@ export default function TransitionWrapper(props: Props) {
 
   // 在 test 分支上添加注释
 
+<<<<<<< Updated upstream
   // test 分支在暂存后添加的注释
+=======
+  // test 分支添加暂存的注释
+>>>>>>> Stashed changes
 
   useEffect(() => {
     // 不通过额外的节点去增加子元素的属性
