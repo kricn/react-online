@@ -63,6 +63,22 @@ const menu:Array<RouteInterface> = [
       icon: HomeOutlined,
       auth: true
     }
+  },
+  {
+    path: '/dragger',
+    component: lazy(() => import('@/views/Dragger')),
+    meta: {
+      title: '拖拽',
+      icon: HomeOutlined
+    }
+  },
+  {
+    path: '/canvas',
+    component: lazy(() => import('@/views/Canvas')),
+    meta: {
+      title: 'canvas',
+      icon: HomeOutlined
+    }
   }
 ]
 
