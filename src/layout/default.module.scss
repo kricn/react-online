@@ -25,5 +25,10 @@
   }
   :global(.ant-layout-content) {
     overflow-x: hidden;
+    padding: 10px;
+    .contentInner {
+      background-color: #fff;
+      padding: 10px;
+    }
   }
 }

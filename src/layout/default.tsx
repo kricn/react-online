@@ -36,8 +36,10 @@ function DefaultLayout () {
         <Header>
           <HeaderBar />
         </Header>
-        <Content>
-          <Outlet />
+        <Content className="flex">
+          <div className={`${style.contentInner} f1`}>
+            <Outlet />
+          </div>
         </Content>
       </Layout>
     </Layout>
