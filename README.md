@@ -164,3 +164,4 @@ const generateRoute:any = (routes:Array<RouteInterface>, isLogin: boolean = fals
   })
 }
 ```
+## mobx 的使用
