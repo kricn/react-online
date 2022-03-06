@@ -2,4 +2,44 @@
   width: 100px;
   height: 100px;
   background-color: aquamarine;
+  margin-right: 20px;
+}
+
+.drop {
+  width: 300px;
+  height: 200px;
+  background-color: #eee;
+}
+
+.list {
+  width: 300px;
+  text-align: center;
+  background-color: #eee;
+  padding: 20px;
+  .listItem {
+    background-color: #fff;
+    padding: 10px 0;
+    margin: 5px 0;
+    cursor: pointer;
+    // box-shadow: 1px 0 5px #ddd;
+  }
+}
+
+@keyframes dropUp {
+  100% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes dropDown {
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+.drop-up{
+  animation: dropUp 0.3s ease-in-out forwards;
+}
+.drop-down{
+  animation: dropDown 0.3s ease-in-out forwards;
 }
