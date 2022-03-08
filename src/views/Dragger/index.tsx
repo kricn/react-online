@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
+
 import style from './index.module.scss'
 import { deepCopy } from '@/utils'
 
@@ -13,6 +14,8 @@ export default function Dragger() {
   const [list, setList] = useState<DragList[]>([])
 
   const [dragId, setDragId] = useState<string | undefined>(undefined)
+  const [dropId, setDropId] = useState<string | undefined>(undefined)
+  const [dropNode, setDropNode] = useState<EventTarget & HTMLDivElement | undefined>(undefined)
 
   const getList = () => {
     setList(
@@ -27,6 +30,11 @@ export default function Dragger() {
     getList()
   }, [])
 
+  useEffect(() => {
+    setListItemAnimation(dropNode)
+    move(dragId, dropId)
+  }, [dragId, dropId, dropNode])
+
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     const ele = e.target as HTMLElement
     e.dataTransfer.setData('DRAG_NODE_ID', ele.id)
@@ -40,7 +48,7 @@ export default function Dragger() {
   }
 
   const move = (dragId?: string, dropId?:string) => {
-    if (dragId === dropId) return ;
+    if (!dragId || !dropId) return ;
     const dragIndex = list.findIndex(item => item.value === dragId)
     const dropIndex = list.findIndex(item => item.value === dropId)
     const listClone: DragList[] = deepCopy(list)
@@ -61,18 +69,24 @@ export default function Dragger() {
 
   const listItemDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault(); // 允许放置，阻止默认事件
-    const dropId = e.currentTarget.dataset.index;
+    const currentDropId = e.currentTarget.dataset.index
+    setDropId((oldVal: string | undefined) => {
+      if (currentDropId !== oldVal) oldVal = currentDropId
+      return oldVal
+    })
+    setDropNode(e.currentTarget)
+  };
+
+  const setListItemAnimation = (node: EventTarget & HTMLDivElement | undefined) => {
     const dragIndex = list.findIndex(item => item.value === dragId)
     const dropIndex = list.findIndex(item => item.value === dropId)
-     // 通过增加对应的 CSS class，实现视觉上的动画过渡
-    e.currentTarget.classList.remove(style["drop-up"], style["drop-down"]);
+    node?.classList.remove(style["drop-up"], style["drop-down"]);
     if (dragIndex < dropIndex) {
-      e.currentTarget.classList.add(style["drop-down"]);
+      node?.classList.add(style["drop-down"]);
     } else if (dragIndex > dropIndex) {
-      e.currentTarget.classList.add(style["drop-up"]);
+      node?.classList.add(style["drop-up"]);
     }
-    move(dragId, dropId); // 改变原列表数据
-  };
+  }
 
   const listItemDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.currentTarget.style.opacity = "0";
@@ -92,7 +106,7 @@ export default function Dragger() {
       <div className={style.list}>
         {
           !list.length ? 'loading.....' :
-          list.map((item, index) => {
+          list.map(item => {
             return (
               <div 
                 className={style.listItem} 
