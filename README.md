@@ -3,6 +3,8 @@
 - [配置路径别名和antd](#配置路径别名和antd)
 - [配置store](#配置store)
 - [规划路由](#规划路由)
+- [mobx 的使用](#mobx的使用)
+- [拖拽](#拖拽)
 ## 项目初始化 {#init}
 通过命令 npx create-react-app my-app --template typescript 创建项目  
 安装 craro，这样可以不暴露出 webpack 那些配置  
@@ -164,4 +166,75 @@ const generateRoute:any = (routes:Array<RouteInterface>, isLogin: boolean = fals
   })
 }
 ```
-## mobx 的使用
+## mobx的使用
+1. 安装 mobx, mobx-react
+```sh
+yarn add mobx mobx-react
+```
+2. 新建 store 文件夹，管理所有状态 
+3. 分文件管理状态，新建 appStore 文件，管理用户状态
+```ts
+import {observable, action, makeObservable} from 'mobx'
+/**
+ * observable 装饰器表示定义一个可观察变量
+ * action 装饰器表示定义一个修改内部变量的方法
+ * get 装饰器定义一个计算属性
+ */
+interface UserInfo {
+  username?: string
+}
+interface Users {
+}
+class AppStore {
+  constructor() {
+    makeObservable(this) // 高版本的 mobx 需要在构造器中加上这句
+  }
+  @observable isLogin: Boolean = false  //利用cookie来判断用户是否登录，避免刷新页面后登录状态丢失
+  @observable users: Users[] = []  //用户数据库
+  @observable userInfo: UserInfo = {}  //当前登录用户信息
+  // 切换用户状态
+  @action toggleLogin(flag: boolean, info={}) {
+    this.userInfo = info  //设置登录用户信息
+    if (flag) {
+      this.isLogin = true
+    } else {
+      this.isLogin = false
+    }
+  }
+}
+export default new AppStore()
+```
+4. 将定义好的 store 注入所有组件中
+```ts
+// index.tsx
+// ...
+import { Provider } from 'mobx-react'; 
+import store from '@/store'  // 统一的 store 出口
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Provider {...store}>
+      <App />
+    </Provider>
+  </BrowserRouter>,
+  document.getElementById('root')
+);
+```
+5. 在组件中使用
+```tsx
+// /src/Login/index.tsx
+
+import { inject, observer } from 'mobx-react'
+
+// import appstore from '@/store/appStore'
+
+function Login({appStore}: any) {
+  // 通过导入 appStroe 直接使用
+  // 再用 observer 包裹组件
+  // ...
+}
+
+// 通过 inject 注入 store，store 就会被注入到 props 中
+export default inject('appStore')(observer(Login))
+```
+## 拖拽
