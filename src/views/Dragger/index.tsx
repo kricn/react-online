@@ -33,6 +33,8 @@ export default function Dragger() {
   useEffect(() => {
     setListItemAnimation(dropNode)
     move(dragId, dropId)
+    // 消除 eslint 警告
+    // eslint-disable-next-line
   }, [dragId, dropId, dropNode])
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
