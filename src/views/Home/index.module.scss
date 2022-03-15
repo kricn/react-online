@@ -1,3 +1,8 @@
 .home {
-  // height: 2000vh;
+  .btnGroup {
+    margin: 20px 0;
+    :global(.ant-btn) {
+      margin-right: 20px;
+    }
+  }
 }
