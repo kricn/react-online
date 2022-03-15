@@ -2,6 +2,16 @@ const path = require('path')
 
 const pathResolve = pathUrl => path.join(__dirname, pathUrl)
 
+const getProxy = (path = '') => {
+  return {
+    target: path || 'http://localhost:8001',
+    changeOrigin: true,
+    pathRewrite: {
+      "^/api": ''
+    }
+  }
+}
+
 module.exports = {
   webpack: {
     alias: {
@@ -12,5 +22,10 @@ module.exports = {
     plugins: [
       ['import', { libraryName: 'antd', style: true, libraryDirectory: 'es' }]
     ]
+  },
+  devServer: {
+    proxy: {
+      '/api':getProxy()
+    }
   }
 }
