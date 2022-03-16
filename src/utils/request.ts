@@ -71,8 +71,9 @@ interface RequestOptions {
 type Method = 'GET' | 'POST' | 'DELETE' | 'PUT'
 
 const request = (method: Method, path: string, params?: any, data?: any, options?: RequestOptions):Promise<any> => {
-  if (cachePool.has(path)) {
-    const key = [ method, path, qs.stringify(params), qs.stringify(data) ].join('&')
+  const cacheItem = cachePool.get(path)
+  const key = [ method, path, qs.stringify(params), qs.stringify(data) ].join('&')
+  if (cacheItem?.get(key)) {
     return Promise.resolve(cachePool.get(path)?.get(key))
   }
   return Service({
