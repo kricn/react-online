@@ -5,6 +5,7 @@
 - [规划路由](#规划路由)
 - [mobx 的使用](#mobx的使用)
 - [拖拽](#拖拽)
+- [Axios的封装和对请求进行缓存(LRU缓存)](#Axios的封装和对请求进行缓存(LRU缓存))
 ## 项目初始化 {#init}
 通过命令 npx create-react-app my-app --template typescript 创建项目  
 安装 craro，这样可以不暴露出 webpack 那些配置  
@@ -238,3 +239,5 @@ function Login({appStore}: any) {
 export default inject('appStore')(observer(Login))
 ```
 ## 拖拽
+
+## Axios的封装和对请求进行缓存(LRU缓存)
