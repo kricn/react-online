@@ -239,5 +239,37 @@ function Login({appStore}: any) {
 export default inject('appStore')(observer(Login))
 ```
 ## 拖拽
+浏览器上的元素一般是不允许拖拽移动的，需要给需要拖拽的元素添加属性 draggable 表示该元素可以进行拖拽。拖拽后的元素并不会被复制或移动到放开点，需要在需要放置的点作额外的处理 
+```tsx
+function Demo () {
 
+  // 在拖拽开始时(拖拽对象被鼠标按下)，通过 e.dataTransfer.setData 记录下当前元素
+  // 这里是通过 id 记录
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    const ele = e.target as HTMLElement
+    e.dataTransfer.setData('DRAG_NODE_ID', ele.id)
+  }
+
+  // 在可以放置拖拽对象的区域处理拖拽过来的对象
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    const ele = e.target as HTMLElement
+    // 禁止默认时间
+    e.preventDefault();
+    // 从刚才保存的数据中拿到数据
+    var data = e.dataTransfer.getData('DRAG_NODE_ID');
+    // 将对象节点插入到当前的元素下
+    ele.appendChild(document.getElementById(data) as HTMLElement);
+  }
+
+  return (
+    <>
+      <div onDrop={handleDrop}  onDragOver={e => e.preventDefault()}>
+        <div className={style.box} id="dragger" onDragStart={handleDragStart} draggable>拖拽元素</div>
+        <div className={style.drop} onDrop={handleDrop} onDragOver={e => e.preventDefault()}>放置区域</div>
+      </div>
+    </>
+  )
+
+}
+```
 ## Axios的封装和对请求进行缓存(LRU缓存)
