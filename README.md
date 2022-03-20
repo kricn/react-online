@@ -272,4 +272,9 @@ function Demo () {
 
 }
 ```
+### [拖拽列表](/src/views/Dragger/index.tsx) 
+列表的拖动不需要使用dataTransfer.getData & dataTransfer.setData，只需要通过改变数组列表中元素的位置即可 
+- onDragStart 获取需要拖拽的目标 a
+- onDragOver 获取放置的目标 b
+- 交换 a b在列表中的位置
 ## Axios的封装和对请求进行缓存(LRU缓存)
