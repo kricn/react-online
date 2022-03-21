@@ -72,14 +72,14 @@ const menu:Array<RouteInterface> = [
       icon: HomeOutlined
     }
   },
-  {
-    path: '/canvas',
-    component: lazy(() => import('@/views/Canvas')),
-    meta: {
-      title: 'canvas',
-      icon: HomeOutlined
-    }
-  }
+  // {
+  //   path: '/canvas',
+  //   component: lazy(() => import('@/views/Canvas')),
+  //   meta: {
+  //     title: 'canvas',
+  //     icon: HomeOutlined
+  //   }
+  // }
 ]
 
 export default menu
