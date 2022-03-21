@@ -278,3 +278,60 @@ function Demo () {
 - onDragOver 获取放置的目标 b
 - 交换 a b在列表中的位置
 ## Axios的封装和对请求进行缓存(LRU缓存)
+### Axios 的封装
+```js
+import qs from 'qs';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ResponseBody } from '@/types';
+const Service = axios.create({
+  baseURL: '',
+  timeout: 30 * 1000
+})
+//拦截器
+//请求拦截
+Service.interceptors.request.use(config => {
+	return config
+}, error => {
+	return Promise.reject(error)
+});
+// 扩展原来的AxiosResponse
+// 这样可以在响应 response.config 中拿到自己的自定义的传参
+interface AxiosResponseExtend extends AxiosResponse<ResponseBody, any> {
+  config: AxiosRequestConfig & RequestOptions
+}
+// 响应拦截
+Service.interceptors.response.use(((response: AxiosResponseExtend) => {
+	const data = response.data
+	return data
+  // 此处需要断言为 any，不然自定义不了类型
+}) as any, error => {
+  // 构建接口错误返回结构
+	return {
+    code: -1,
+    msg: `${error}`,
+    data: null
+  }
+});
+
+interface RequestOptions {
+  headers?: any
+  isCache?: boolean
+}
+type Method = 'GET' | 'POST' | 'DELETE' | 'PUT'
+// 这里返回一个 Promise 而不是一个 AxiosPromise
+const request = (method: Method, path: string, params?: any, data?: any, options?: RequestOptions):Promise<any> => {
+  return Service({
+    method,
+    url: path,
+    params,
+    data,
+    headers: options?.headers,
+    ...options,
+  })
+}
+export default request
+```
+### 对请求做缓存
+- 场景
+列表页面有许多筛选项的时候，可以对其进行缓存，但并不是每个筛选项都要做缓存，我们只对高频率的筛选项做缓存（[LRU算法](/src//utils//LRUCache.ts)），用空间换时间。
+- [封装请求](/src/utils/request.ts)
