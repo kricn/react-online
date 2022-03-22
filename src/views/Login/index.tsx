@@ -23,7 +23,7 @@ function Login({appStore}: any) {
 
   const onSubmit = () => {
     const username = form.getFieldValue('username')
-    appStore.toggleLogin(true, {username})
+    appStore.toggleLogin({username})
     setToken(username)
     navigate('/')
   }

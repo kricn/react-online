@@ -241,7 +241,7 @@ function User() {
     setSubmitting(true)
     // 模拟提交请求
     await new Promise(resolve => setTimeout(resolve, 1000))
-    appStore.toggleLogin(true, {
+    appStore.toggleLogin({
       username: params.username
     })
     setToken(params.username)

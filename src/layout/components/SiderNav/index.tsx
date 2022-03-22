@@ -68,7 +68,7 @@ function SiderNav({ appStore }: any) {
       </SubMenu>
     )
   }
-  return renderMenu(generateRoute(menus, appStore.isLogin));
+  return renderMenu(generateRoute(menus, !!appStore.userInfo?.username));
 }
 
 export default inject('appStore')(observer(SiderNav))

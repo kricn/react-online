@@ -59,7 +59,7 @@ function RouteView ( {appStore}: any) {
     loading ? <LazyLoading /> :
     (
       <Routes>
-        { renderRoute(generateRoute(routers, appStore.isLogin)) }
+        { renderRoute(generateRoute(routers, !!appStore.userInfo?.username)) }
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     )
