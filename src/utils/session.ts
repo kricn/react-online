@@ -38,14 +38,14 @@ function _setCookie (name: string, value: string, expire: number=10) {
 /** token 方法 */
 const LOGIN_TOKEN_NAME = 'token'
 
-export const getToken = ():string => {
-  return sessionStorage.getItem(LOGIN_TOKEN_NAME) || ''
+export const getToken = (name?: string):string => {
+  return sessionStorage.getItem(name || LOGIN_TOKEN_NAME) || ''
 }
 
-export const setToken = (token:string) => {
-  sessionStorage.setItem(LOGIN_TOKEN_NAME, token)
+export const setToken = (name: string, token:string) => {
+  sessionStorage.setItem(name, token)
 }
 
-export const removeToken = () => {
-  sessionStorage.removeItem(LOGIN_TOKEN_NAME)
+export const removeToken = (name?: string) => {
+  sessionStorage.removeItem(name || LOGIN_TOKEN_NAME)
 }

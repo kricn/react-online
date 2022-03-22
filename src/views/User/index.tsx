@@ -244,7 +244,7 @@ function User() {
     appStore.toggleLogin({
       username: params.username
     })
-    setToken(params.username)
+    setToken('token', params.username)
     message.success('提交成功✔')
     setSubmitting(false)
     // 重新获取表单

@@ -17,7 +17,7 @@ function RouteView ( {appStore}: any) {
 
   // 判断是否已经登录过
   useEffect(() => {
-    getToken() ? appStore.toggleLogin(true, {username: getToken()}) : appStore.toggleLogin(false)
+    getToken() ? appStore.toggleLogin({username: getToken()}) : appStore.toggleLogin({})
     setLoading(false)
   }, [loading, appStore])
 

@@ -24,7 +24,7 @@ function Login({appStore}: any) {
   const onSubmit = () => {
     const username = form.getFieldValue('username')
     appStore.toggleLogin({username})
-    setToken(username)
+    setToken('token', username)
     navigate('/')
   }
 
