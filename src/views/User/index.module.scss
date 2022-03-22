@@ -1,0 +1,12 @@
+.form {
+  width: 80%;
+  padding: 50px 0;
+  margin: auto;
+  :global(.ant-form-item) {
+    &.eventBtGroup {
+      :global(.ant-btn) {
+        margin-right: 20px;
+      }
+    }
+  }
+}
