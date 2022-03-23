@@ -22,7 +22,6 @@ import { observer } from 'mobx-react'
 import moment from 'moment'
 
 import style from './index.module.scss'
-import { getToken, setToken } from '@/utils/session'
 import appStore from '@/store/appStore'
 
 const { Option } = Select
@@ -32,7 +31,6 @@ const labelCol = 4
 
 const rules: any = {
   username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
-  address: [{ type: 'array', required: true, message: '请选择区域' }],
   agreement: [{validator: (_: any, value: any) => value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),}]
 }
 
@@ -214,6 +212,7 @@ function User() {
   // 格式化上传组件的 fileList
   const handleFormatFile = (files: any[]) => {
     return files.map(async item => {
+      console.log(item)
       const url = item?.originFileObj ? await getBase64(item?.originFileObj) : item.url
       return {
         url,
@@ -226,11 +225,11 @@ function User() {
   const handleFormatForm = () => {
     const values = form.getFieldsValue()
     // 处理头像
-    handleFormatFile(values.avatar)
+    values.avatar = handleFormatFile(values.avatar.slice(-1))
     // 处理封面
-    handleFormatFile(values.cover)
+    values.cover = handleFormatFile(values.cover)
     // 处理文件
-    handleFormatFile(values.files)
+    values.files = handleFormatFile(values.files)
     // 处理日期
     values.date = values.date.format('yyyy-MM-dd')
     return values
@@ -241,10 +240,11 @@ function User() {
     setSubmitting(true)
     // 模拟提交请求
     await new Promise(resolve => setTimeout(resolve, 1000))
+    // 更新用户信息
     appStore.toggleLogin({
-      username: params.username
+      username: params.username,
+      avatar: params.avatar
     })
-    setToken('token', params.username)
     message.success('提交成功✔')
     setSubmitting(false)
     // 重新获取表单
@@ -262,11 +262,9 @@ function User() {
       const initValues = getFormInitValues()
       await new Promise(resolve => setTimeout(resolve, 500))
       // 模拟请求到的数据
-      initValues.username = getToken()
+      initValues.username = appStore.userInfo.username
       // 设置头像
-      initValues.avatar = [
-        {url: require('@/assets/avatar.webp'), name: 'login.webp'}
-      ]
+      initValues.avatar = appStore.userInfo.avatar
       setAvatar(require('@/assets/avatar.webp'))
       // 设置封面
       initValues.cover = [
@@ -322,7 +320,6 @@ function User() {
         <Form.Item
           name="address"
           label="区域"
-          rules={rules.address}
         >
           <Cascader options={addressOptions} />
         </Form.Item>
