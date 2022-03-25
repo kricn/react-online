@@ -23,7 +23,7 @@ function HeaderBar({ appStore }: any) {
           <div className={style.username}>{appStore.userInfo.username || '用户未登录'}</div>
           {/* <div className='note'></div> */}
           <div className={`${style.avatar} mgl_20`}>
-            <img src={appStore?.avatar || require("@/assets/avatar.webp")} alt="avatar" />
+            <img src={appStore.userInfo?.avatar ? appStore.userInfo.avatar[0].url : require("@/assets/avatar.webp")} alt="avatar" />
           </div>
         </div>
       </Dropdown>

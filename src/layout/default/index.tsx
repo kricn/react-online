@@ -12,7 +12,7 @@ import SiderNav from './components/SiderNav'
 import HeaderBar from './components/HeaderBar';
 
 // 样式
-const style = require('./default.module.scss').default;
+const style = require('./index.module.scss').default;
 
 const { Sider, Header, Content } = Layout
 
@@ -36,8 +36,8 @@ function DefaultLayout () {
         <Header>
           <HeaderBar />
         </Header>
-        <Content className="flex">
-          <div className={`${style.contentInner} f1`}>
+        <Content>
+          <div className={`${style.contentInner}`}>
             <Outlet />
           </div>
         </Content>
