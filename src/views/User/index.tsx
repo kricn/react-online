@@ -124,6 +124,8 @@ function User() {
   const [loading, setLoading] = useState<boolean>(false)
   // 提交中
   const [submitting, setSubmitting] = useState<boolean>(false)
+  // 不受代理的 cover
+  const [coverList, setCoverList] = useState<any>([])
 
   // 自定义校验输入框触发 change 事件
   const handleCustomizeInputChange = async () => {
@@ -209,34 +211,42 @@ function User() {
     }
   }
 
+  // 不受控封面上传
+  const handleCoverChange = async (info:any) => {
+    // 判断是否处于完成状态 成功或失败移除都算完成
+    setCoverList(info.fileList)
+  }
+
   // 格式化上传组件的 fileList
-  const handleFormatFile = (files: any[]) => {
-    return files.map(async item => {
-      console.log(item)
+  const handleFormatFile = async (files: any[]) => {
+    let res = new Array(files.length)
+    for (let i = 0; i < files.length; i ++) {
+      const item = files[i]
       const url = item?.originFileObj ? await getBase64(item?.originFileObj) : item.url
-      return {
+      res[i] = {
         url,
         name: item.name,
         status: item.status || 'success'
       }
-    })
+    }
+    return res
   }
 
-  const handleFormatForm = () => {
+  const handleFormatForm = async () => {
     const values = form.getFieldsValue()
     // 处理头像
-    values.avatar = handleFormatFile(values.avatar.slice(-1))
+    values.avatar = await handleFormatFile(values.avatar.slice(-1))
     // 处理封面
-    values.cover = handleFormatFile(values.cover)
+    values.cover = await handleFormatFile(values.cover)
     // 处理文件
-    values.files = handleFormatFile(values.files)
+    values.files = await handleFormatFile(values.files)
     // 处理日期
     values.date = values.date.format('yyyy-MM-dd')
     return values
   }
 
   const onSubmit = async () => {
-    const params = handleFormatForm()
+    const params = await handleFormatForm()
     setSubmitting(true)
     // 模拟提交请求
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -265,11 +275,15 @@ function User() {
       initValues.username = appStore.userInfo.username
       // 设置头像
       initValues.avatar = appStore.userInfo.avatar
-      setAvatar(require('@/assets/avatar.webp'))
+      setAvatar(appStore.userInfo.avatar ? appStore.userInfo.avatar[0].url : require('@/assets/avatar.webp'))
       // 设置封面
       initValues.cover = [
         {url: require('@/assets/avatar.webp'), name: 'login.webp'}
       ]
+      // 设置不受控封面
+      setCoverList([
+        {url: require('@/assets/avatar.webp'), name: 'login.webp'}
+      ])
       // 设置文件
       initValues.files = [
         {url: require('@/assets/avatar.webp'), name: 'login.webp'}
@@ -279,7 +293,8 @@ function User() {
       setFormInitValues(initValues)
       form.setFieldsValue(initValues)
       setLoading(false)
-    }, [form])
+    },
+  [form])
 
   useEffect(() => {
     getList()
@@ -389,6 +404,22 @@ function User() {
         </Form.Item>
 
         <Form.Item
+          name="onProxyCover"
+          label="不通过Form代理fileList的封面列表"
+        >
+          <Upload
+            name="onProxyCover"
+            listType="picture-card"
+            action=""
+            fileList={coverList}
+            beforeUpload={(file: File) => beforeImageUpload(file, 8)}
+            onChange={handleCoverChange}
+          >
+            {coverList?.length >= 5 ? null : uploadButton}
+          </Upload>
+        </Form.Item>
+
+        <Form.Item
           name="files"
           label="不限制格式和大小的列表"
           valuePropName="fileList"
@@ -416,7 +447,7 @@ function User() {
 
         <Form.Item className={style.eventBtGroup} wrapperCol={{offset: labelCol}}>
           <Button type="primary" htmlType="submit" loading={submitting}>
-            登录
+            提交
           </Button>
           <Button htmlType="button" onClick={onReset}>
             Reset
