@@ -23,45 +23,44 @@ const menu:Array<RouteInterface> = [
       icon: HomeOutlined
     }
   },
-  {
-    path: '/animation',
-    component: lazy(() => import("@/views/Animation")),
-    meta: {
-      title: '动画',
-      icon: HomeOutlined
-    }
-  },
-  {
-    path: '/about',
-    component: lazy(() => import('@/views/About')),
-    meta: {
-      title: '关于',
-      icon: HomeOutlined
-    },
-    children: [
-      {
-        path: '/about/test',
-        component: lazy(() => import('@/views/User')),
-        meta: {
-          title: '关于下的子菜单'
-        }
-      },
-      {
-        path: '/about/test2',
-        component: lazy(() => import('@/views/User')),
-        meta: {
-          title: '关于下的子菜单2'
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/animation',
+  //   component: lazy(() => import("@/views/Animation")),
+  //   meta: {
+  //     title: '动画',
+  //     icon: HomeOutlined
+  //   }
+  // },
+  // {
+  //   path: '/about',
+  //   component: lazy(() => import('@/views/About')),
+  //   meta: {
+  //     title: '关于',
+  //     icon: HomeOutlined
+  //   },
+  //   children: [
+  //     {
+  //       path: '/about/test',
+  //       component: lazy(() => import('@/views/User')),
+  //       meta: {
+  //         title: '关于下的子菜单'
+  //       }
+  //     },
+  //     {
+  //       path: '/about/test2',
+  //       component: lazy(() => import('@/views/User')),
+  //       meta: {
+  //         title: '关于下的子菜单2'
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/user',
     component: lazy(() => import('@/views/User')),
     meta: {
       title: '个人中心',
-      icon: HomeOutlined,
-      auth: true
+      icon: HomeOutlined
     }
   },
   {
@@ -69,6 +68,14 @@ const menu:Array<RouteInterface> = [
     component: lazy(() => import('@/views/Dragger')),
     meta: {
       title: '拖拽',
+      icon: HomeOutlined
+    }
+  },
+  {
+    path: '/virtual-list',
+    component: lazy(() => import('@/views/VirtualList')),
+    meta: {
+      title: '虚拟列表',
       icon: HomeOutlined
     }
   },
