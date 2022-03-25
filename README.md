@@ -6,6 +6,8 @@
 - [mobx 的使用](#mobx的使用)
 - [拖拽](#拖拽)
 - [Axios的封装和对请求进行缓存(LRU缓存)](#Axios的封装和对请求进行缓存(LRU缓存))
+- [Antd Form 组件常用表单的使用](#Form组件常用表单的使用)
+- 虚拟列表
 ## 项目初始化 {#init}
 通过命令 npx create-react-app my-app --template typescript 创建项目  
 安装 craro，这样可以不暴露出 webpack 那些配置  
@@ -335,3 +337,43 @@ export default request
 - 场景
 列表页面有许多筛选项的时候，可以对其进行缓存，但并不是每个筛选项都要做缓存，我们只对高频率的筛选项做缓存（[LRU算法](/src//utils//LRUCache.ts)），用空间换时间。
 - [封装请求](/src/utils/request.ts)
+## Form组件常用表单的使用
+[参考文件](/src/views/User/index.tsx) 
+**注意点** 
+- 被 Form 下 Form.Item 包裹的子元素中的 value 属性会被 Form 组件代理，隔一层则无效，通过 Form.Item 中的 valuePropName 更改默认代理属性
+```tsx
+<Form>
+  // 有效代理
+  <Form.Item>
+    <Input >
+  </Form.Item>
+  // 无效代理
+  <Form.Item>
+    <Input >
+  </Form.Item>
+</Form>
+```
+- 被 Form 代理后的 Input 组件处罚 change 事件后，回调函数的第一个将不再是 Input 中 value 的值，需要在回调中通过 form.getFieldValue('name') 获取
+- 使用 Form 代理 Upload 组件，需要设置代理属性为 fileList，再添加 getValueFromEvent 提取 出 fileList。之后通过后 form.getFieldValue('file') 获取的就是整个 fileList 的对象 [Upload参考](https://ant.design/components/upload-cn/)
+```tsx
+// 通过 form.getFieldValue('cover') 可以获得已经上传的 fileList
+// 给 Upload 自定义 fileList 属性可以不接受 Form 的代理
+// 但这样需要自行处理 onChange 事件
+
+<Form.Item
+  name="cover"
+  label="封面列表"
+  valuePropName="fileList"  // 设置代理属性
+  getValueFromEvent={normFile} // 提取filelist，没有该属性上传时会报错
+>
+  <Upload
+    name="cover"
+    listType="picture-card"
+    action=""
+    beforeUpload={(file: File) => beforeImageUpload(file, 8)}
+    onChange={() => null} // onChange 可以不用设置，会自动代理，只需要再提交的时候格式化一下格式即可
+  >
+    // ...
+  </Upload>
+</Form.Item>
+```
