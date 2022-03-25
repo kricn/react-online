@@ -1,15 +1,12 @@
 import { testRequest } from '@/api/index'
 import { observer } from 'mobx-react'
 import { useEffect, useState } from 'react'
-import testStore from '@/store/testStore'
 
 import { Button, Empty } from 'antd'
 
 const style = require('./index.module.scss').default
 
 function Home() {
-
-  const { state } = testStore
 
   const [list, setList] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(false)
@@ -29,10 +26,6 @@ function Home() {
     setLoading(false)
   }
 
-  const handleToogleState = () => {
-    testStore.toggleState(!state)
-  }
-
   useEffect(() => {
     getList()
   }, [])
@@ -42,7 +35,6 @@ function Home() {
       home
       <div className={style.btnGroup}>
         <Button type='primary' onClick={getList}>再次请求</Button>
-        <Button type='primary' onClick={handleToogleState}>改变状态</Button>
       </div>
       <div>
         {
