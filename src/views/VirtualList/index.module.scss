@@ -1,0 +1,18 @@
+.container {
+  width: 300px;
+  overflow-y: auto;
+  .box {
+    width: 100%;
+    height: 100%;
+  }
+  .list {
+    background-color: #eaeaea;
+    .listItem {
+      background-color: #fff;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      // min-height: 64px;
+      // max-height: 64px;
+    }
+  }
+}
