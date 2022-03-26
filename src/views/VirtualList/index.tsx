@@ -54,7 +54,7 @@ function VirtualList() {
         break;
       }
     }
-    return  i - startIndex
+    return  i - startIndex + 5
   }, [positionCache, startIndex]);
 
   // 计算结束下标
@@ -159,14 +159,28 @@ function VirtualList() {
     nodeList?.forEach((node) => {
       const ele = node as HTMLDivElement
       let newHeight = ele.offsetHeight;
+      // 当前节点的高度
       const nodeIndex = Number(ele.dataset.index);
-      const oldHeight = positionCache[nodeIndex]["height"];
+      // 原来记录的节点高度
+      const oldHeight = positList[nodeIndex]["height"];
+      // 两个高度的差值，有差值说明需要更新
       const dValue = oldHeight - newHeight;
-      if (dValue) {
+      // 上一个节点的 bottom 
+      const previousBottom = nodeIndex > 0 ? positList[nodeIndex - 1].bottom : positList[nodeIndex].height
+      // 当前节点的 bottom 
+      const thisBottom = positList[nodeIndex].bottom
+      // 
+      const end = nodeIndex + 20 > positList.length ? positList.length : nodeIndex + 11
+      if (dValue || previousBottom !== thisBottom) {
         needUpdate = true;
         positList[nodeIndex].height = newHeight;
         positList[nodeIndex].bottom = nodeIndex > 0 ? (positList[nodeIndex - 1].bottom + positList[nodeIndex].height) : positList[nodeIndex].height;
         positList[nodeIndex].top = nodeIndex > 0 ? positList[nodeIndex - 1].bottom : 0;
+        // for (let i = nodeIndex; i < end; i ++) {
+        //   positList[i].height = newHeight;
+        //   positList[i].bottom = i > 0 ? (positList[i - 1].bottom + positList[i].height) : positList[i].height;
+        //   positList[i].top = i > 0 ? positList[i - 1].bottom : 0;
+        // }
       }
     })
     if (needUpdate) {
