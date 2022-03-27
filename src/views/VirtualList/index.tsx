@@ -11,7 +11,6 @@ interface ListItem {
 interface PostionCacheItem {
   index: number
   height: number
-  top: number
   bottom: number
 }
 
@@ -25,7 +24,7 @@ enum CompareResult {
 const defaultItemHeight: number = 64
 
 // 容器高度
-const containerHeight: number = 400
+const containerHeight: number = 600
 
 function VirtualList() {
 
@@ -54,11 +53,15 @@ function VirtualList() {
         break;
       }
     }
-    return  i - startIndex + 5
+    // 这里要渲染多至少一个点以上，不然前面的点高的总和大于了初始的容器高度，则整个列表都不能再滚动了
+    // 会出现不能显示全或有一小断空白情况
+    console.log(i, startIndex)
+    return  i - startIndex + 2
   }, [positionCache, startIndex]);
 
   // 计算结束下标
   const endIndex = useMemo(() => {
+    console.log(positionCache[Math.min(startIndex + limit, list.length - 1)])
     return Math.min(startIndex + limit, list.length - 1);
     // eslint-disable-next-line
   }, [startIndex, limit])
@@ -66,12 +69,9 @@ function VirtualList() {
   // 列表总高度
   const listHeight = useMemo(() => {
     let len = positionCache.length;
-    let sum = 0;
-    for (let i = 0; i < len; i ++) {
-      console.log(sum, positionCache[i], sum += positionCache[i].height, i)
-    }
-    // return sum
     if (len !== 0) {
+      // 直接返回最后一个点的 bottom，这样不用累加所有节点的高度
+      // 同时，累加所有节点的高度时，高度会不正确，尚不清楚原因
       return positionCache[len - 1].bottom
     }
     return list.length * defaultItemHeight;
@@ -81,7 +81,7 @@ function VirtualList() {
   const getList = async () => {
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 500))
-    const len: number = 100
+    const len: number = 200
     const tmp = {
       label: '',
       value: -1,
@@ -169,18 +169,16 @@ function VirtualList() {
       const previousBottom = nodeIndex > 0 ? positList[nodeIndex - 1].bottom : positList[nodeIndex].height
       // 当前节点的 bottom 
       const thisBottom = positList[nodeIndex].bottom
-      // 
-      const end = nodeIndex + 20 > positList.length ? positList.length : nodeIndex + 11
-      if (dValue || previousBottom !== thisBottom) {
+      // 判断当前的 bottom 是否需要更新
+      const dBottom = (thisBottom - previousBottom - newHeight)
+      // 这里不能单纯的判断高度有差就更新
+      // 还要判断它们的新老 bottom，bottom 有差值也要进行更新
+      // 不然单纯的判断高度差可能元素的高度刚好和预设的一样，那有一个 bottom 不会更新
+      // 之后的 bottom 值也会跟着出错
+      if (dValue || dBottom) {
         needUpdate = true;
         positList[nodeIndex].height = newHeight;
         positList[nodeIndex].bottom = nodeIndex > 0 ? (positList[nodeIndex - 1].bottom + positList[nodeIndex].height) : positList[nodeIndex].height;
-        positList[nodeIndex].top = nodeIndex > 0 ? positList[nodeIndex - 1].bottom : 0;
-        // for (let i = nodeIndex; i < end; i ++) {
-        //   positList[i].height = newHeight;
-        //   positList[i].bottom = i > 0 ? (positList[i - 1].bottom + positList[i].height) : positList[i].height;
-        //   positList[i].top = i > 0 ? positList[i - 1].bottom : 0;
-        // }
       }
     })
     if (needUpdate) {
@@ -190,6 +188,7 @@ function VirtualList() {
   }, [scrollTop])
 
   const getTransform = useCallback(() => {
+    // 这里做个偏移，这样在拉动过快时就不会出现白屏
     return `translate3d(0,${startIndex >= 1 ? positionCache[startIndex - 1].bottom : 0}px,0)`
   }, [positionCache, startIndex]);
 
@@ -203,7 +202,6 @@ function VirtualList() {
       positList[i] = {
         index: i,
         height: defaultItemHeight,
-        top: i * defaultItemHeight,
         bottom: (i + 1) * defaultItemHeight,
       }
     })
@@ -235,7 +233,6 @@ function VirtualList() {
           <div ref={ListRef} style={{ transform: getTransform()}}>
             {renderListItem()}
           </div>
-          
         </div>
       </div>
     </Spin>
