@@ -53,15 +53,22 @@ function VirtualList() {
         break;
       }
     }
-    // 这里要渲染多至少一个点以上，不然前面的点高的总和大于了初始的容器高度，则整个列表都不能再滚动了
+    // 这里要比视图区域渲染多至少一个点以上，不然前面的点高的总和大于了初始的容器高度，则整个列表都不能再滚动了
     // 会出现不能显示全或有一小断空白情况
-    console.log(i, startIndex)
-    return  i - startIndex + 2
+    // 这里为什么需要加 3 ？
+    // 因为 i - startIndex + 1 是 limit 的数量，容器还可以放多少个
+    // 但因为 startIndex 那个节点可能只有一部分显示在试图范围愉
+    // 所以需要加多一个节点补到后面的空白部分，这样视图就可以做到连续了
+    // 这样虽然可以连续，但当滚动到一定程度后，前面的总高度可能>=最后一个节点的 bottom，
+    // 会倒是数据不能全部显示
+    // 在视图外多渲染一个的好处是，每次滚动都会计算下一个的 bottom
+    // 在没有到底部之前，就永远有下一个的高度，这样直接返回最后一个 bottom 值当作总高度即可
+    // 所以这里需要至少加 3
+    return  i - startIndex + 3
   }, [positionCache, startIndex]);
 
   // 计算结束下标
   const endIndex = useMemo(() => {
-    console.log(positionCache[Math.min(startIndex + limit, list.length - 1)])
     return Math.min(startIndex + limit, list.length - 1);
     // eslint-disable-next-line
   }, [startIndex, limit])
@@ -170,7 +177,7 @@ function VirtualList() {
       // 当前节点的 bottom 
       const thisBottom = positList[nodeIndex].bottom
       // 判断当前的 bottom 是否需要更新
-      const dBottom = (thisBottom - previousBottom - newHeight)
+      const dBottom = thisBottom - previousBottom - newHeight
       // 这里不能单纯的判断高度有差就更新
       // 还要判断它们的新老 bottom，bottom 有差值也要进行更新
       // 不然单纯的判断高度差可能元素的高度刚好和预设的一样，那有一个 bottom 不会更新
