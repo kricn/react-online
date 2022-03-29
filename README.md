@@ -7,7 +7,7 @@
 - [拖拽](#拖拽)
 - [Axios的封装和对请求进行缓存(LRU缓存)](#Axios的封装和对请求进行缓存(LRU缓存))
 - [Antd Form 组件常用表单的使用](#Form组件常用表单的使用)
-- 虚拟列表
+- 虚拟列表[#虚拟列表]
 ## 项目初始化 {#init}
 通过命令 npx create-react-app my-app --template typescript 创建项目  
 安装 craro，这样可以不暴露出 webpack 那些配置  
@@ -377,3 +377,27 @@ export default request
   </Upload>
 </Form.Item>
 ```
+## 虚拟列表
+### 布局
+- 确定容器的大小，即最外层的高度
+- 有一个列表容器，用来放全部数据的
+- 再嵌套一层视口容器，用来显示数据的的，相当于一个窗口在列表容器上滑动
+- 最后只渲染在视口容器内的数据即可
+```tsx
+function VirtualList() {
+  // ...others
+  return (
+    <>
+      <div> {/*外层容器*/}
+        <div> {/*列表容器，高度是全部数据的高度*/}
+          <div> {/*} 视口容器，只渲染部分数据，通过 transform 去配合滚动显示数据 */}
+          {/*视口容器没有动画的话，只数据变换过快时会发生闪烁*/}
+            {renderListItem()}
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+```
+
