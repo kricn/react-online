@@ -46,10 +46,11 @@ function VirtualList() {
   // 计算第几个元素开始超过容器底部
   const limit = useMemo(() => {
     let sum = 0
-    let i = startIndex
+    let i = startIndex + 1
+    const resetContainerHeight = containerHeight - (scrollTop - positionCache[startIndex].height)
     for (; i < positionCache.length; i ++) {
       sum += positionCache[i].height
-      if (sum > containerHeight) {
+      if (sum > resetContainerHeight) {
         break;
       }
     }
@@ -64,7 +65,7 @@ function VirtualList() {
     // 在视图外多渲染一个的好处是，每次滚动都会计算下一个的 bottom
     // 在没有到底部之前，就永远有下一个的高度，这样直接返回最后一个 bottom 值当作总高度即可
     // 所以这里需要至少加 3
-    return  i - startIndex + 3
+    return  i - startIndex + 2
   }, [positionCache, startIndex]);
 
   // 计算结束下标
