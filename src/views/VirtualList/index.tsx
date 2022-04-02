@@ -9,6 +9,8 @@ interface ListItem {
 }
 
 interface PostionCacheItem {
+  label?: string
+  value?: number
   index: number
   height: number
   bottom: number
@@ -30,89 +32,53 @@ function VirtualList() {
 
   // 列表
   const [list, setList] = useState<ListItem[]>([])
-  // loading 动画标志
+  // loading
   const [loading, setLoading] = useState<boolean>(false)
-  // 分割数组开始坐标
+  // 元素开始下标
   const [startIndex, setStartIndex] = useState<number>(0)
-  // 容器滚动距离
-  const [scrollTop, setScrollTop] = useState<number>(0)
-  // 容器节点
-  const ContainerRef = useRef<HTMLDivElement | null>(null)
-  // 列表节点
-  const ListRef = useRef<HTMLDivElement | null>(null)
   // 缓存列表位置
   const [positionCache, setPositionCache] = useState<PostionCacheItem[]>([])
+  // 容器元素
+  const ContainerRef = useRef<HTMLDivElement | null>(null)
+  // 视口元素
+  const ViewRef = useRef<HTMLDivElement>(null)
 
-  // 计算第几个元素开始超过容器底部
-  const limit = useMemo(() => {
-    let sum = 0
-    let i = startIndex + 1
-    const resetContainerHeight = containerHeight - (scrollTop - positionCache[startIndex].height)
-    for (; i < positionCache.length; i ++) {
-      sum += positionCache[i].height
-      if (sum > resetContainerHeight) {
-        break;
-      }
-    }
-    // 这里要比视图区域渲染多至少一个点以上，不然前面的点高的总和大于了初始的容器高度，则整个列表都不能再滚动了
-    // 会出现不能显示全或有一小断空白情况
-    // 这里为什么需要加 3 ？
-    // 因为 i - startIndex + 1 是 limit 的数量，容器还可以放多少个
-    // 但因为 startIndex 那个节点可能只有一部分显示在试图范围愉
-    // 所以需要加多一个节点补到后面的空白部分，这样视图就可以做到连续了
-    // 这样虽然可以连续，但当滚动到一定程度后，前面的总高度可能>=最后一个节点的 bottom，
-    // 会倒是数据不能全部显示
-    // 在视图外多渲染一个的好处是，每次滚动都会计算下一个的 bottom
-    // 在没有到底部之前，就永远有下一个的高度，这样直接返回最后一个 bottom 值当作总高度即可
-    // 所以这里需要至少加 3
-    return  i - startIndex + 2
-  }, [positionCache, startIndex]);
-
-  // 计算结束下标
-  const endIndex = useMemo(() => {
-    return Math.min(startIndex + limit, list.length - 1);
-    // eslint-disable-next-line
-  }, [startIndex, limit])
-
-  // 列表总高度
+  // 列表高度
   const listHeight = useMemo(() => {
-    let len = positionCache.length;
-    if (len !== 0) {
-      // 直接返回最后一个点的 bottom，这样不用累加所有节点的高度
-      // 同时，累加所有节点的高度时，高度会不正确，尚不清楚原因
+    const len = positionCache.length
+    if (len) {
+      // 直接返回最后一项的高度省去循环计算的时间
       return positionCache[len - 1].bottom
     }
-    return list.length * defaultItemHeight;
-  }, [positionCache, list])
+    return list.length * defaultItemHeight
+  }, [list, positionCache])
 
-  // 获取列表
-  const getList = async () => {
-    setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 500))
-    const len: number = 20
-    const tmp = {
-      label: '',
-      value: -1,
+  // 容器还能放下多少个元素
+  const limit = useMemo(() => {
+    let sum = 0;
+    let i = startIndex + 1
+    for (; i < positionCache.length; i ++) {
+      sum += positionCache[i].height
+      if (sum > containerHeight) {
+        break ;
+      }
     }
-    const res: ListItem[] = new Array(len)
-    for (let i = 0; i < len; i ++) {
-      const rand = Math.random()
-      let randStr = ''
-      if (rand < 0.2) randStr = new Array(Math.ceil(Math.random() + Math.random() + rand) * 100).fill('这').join("")
-      if (rand > 0.2 && rand < 0.6) randStr = '之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之'
-      if (rand > 0.6) randStr = '田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田'
-      res[i] = {...tmp}
-      res[i].label = `第 ${i + 1} 项` + randStr
-      res[i].value = i
-    }
-    setLoading(false)
-    setList(res)
-  }
+    // 返回填充下表的差值，并在容器外至少多渲染一个元素
+    // 这样在一些高度刚好的情况下，滚动条不会因为触底而滚动不了
+    return i - startIndex + 1
+  }, [startIndex, positionCache])
+
+  // 元素结束坐标
+  const endIndex = useMemo(() => {
+    return Math.min(startIndex + limit, list.length - 1)
+    // eslint-disable-next-line
+  }, [startIndex, limit])
 
   // 获取开始下标，二分法
   const getStartIndex = (scrollTop: number): number => {
     let idx = binarySearch(positionCache, scrollTop)
     const targetItem = positionCache[idx]
+    // 调整 startIndex 指向存在视口的第一项
     if (targetItem?.bottom < scrollTop) {
       idx += 1
     }
@@ -121,9 +87,15 @@ function VirtualList() {
    // 二分查找
   const binarySearch = (list: PostionCacheItem[], value: number): number => {
     let start: number = 0
-    let end: number = list.length - 1;
+    // 这里不能全列表找，因为列表可能有些值是没有更新的
+    // 这样会导致未更新的数据项和更新后的数据项在计算的时候冲突
+    // 比如前10个数据已经更新，第11条数据的 bottom 是680px 
+    // 但前10条的数据加起来已经超过680px,即使前10条中有一些项的bottom是超过680px的
+    // 这样在迭代过种中会出错，可能导致 startIndex 直接就冲到列表的最后去了
+    let end: number = endIndex;
     let tmpIndex: number = 0;
     while (start <= end) {
+      // 批到终点
       tmpIndex = Math.floor((end + start) >> 1)
       const midItem: PostionCacheItem = list[tmpIndex]
       const compareRes: number = compareValue(midItem?.bottom, value)
@@ -146,12 +118,11 @@ function VirtualList() {
     return CompareResult.gt
   }
 
-  // 滚动回调
+  // 列表滚动时
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement, UIEvent> | Event) => {
     if (e.target !== ContainerRef.current) return;
     const ele = e.target as HTMLDivElement
     const scrollTop = ele.scrollTop;
-    setScrollTop(scrollTop)
     const currentStartIndex = getStartIndex(scrollTop);
     if (currentStartIndex !== startIndex) {
       setStartIndex(currentStartIndex);
@@ -159,46 +130,38 @@ function VirtualList() {
     // eslint-disable-next-line
   }, [ContainerRef, startIndex, positionCache])
 
-  // 触发滚动时，更新子项的高度
-  useEffect(() => {
-    const nodeList = ListRef?.current?.childNodes;
-    const positList = [...positionCache]
-    let needUpdate = false;
-    nodeList?.forEach((node) => {
-      const ele = node as HTMLDivElement
-      let newHeight = ele.offsetHeight;
-      // 当前节点的高度
-      const nodeIndex = Number(ele.dataset.index);
-      // 原来记录的节点高度
-      const oldHeight = positList[nodeIndex]["height"];
-      // 两个高度的差值，有差值说明需要更新
-      const dValue = oldHeight - newHeight;
-      // 上一个节点的 bottom 
-      const previousBottom = nodeIndex > 0 ? positList[nodeIndex - 1].bottom : positList[nodeIndex].height
-      // 当前节点的 bottom 
-      const thisBottom = positList[nodeIndex].bottom
-      // 判断当前的 bottom 是否需要更新
-      const dBottom = nodeIndex > 0 ? thisBottom - previousBottom - newHeight : thisBottom - previousBottom
-      // 这里不能单纯的判断高度有差就更新
-      // 还要判断它们的新老 bottom，bottom 有差值也要进行更新
-      // 不然单纯的判断高度差可能元素的高度刚好和预设的一样，那有一个 bottom 不会更新
-      // 之后的 bottom 值也会跟着出错
-      if (dValue || dBottom) {
-        needUpdate = true;
-        positList[nodeIndex].height = newHeight;
-        positList[nodeIndex].bottom = nodeIndex > 0 ? (positList[nodeIndex - 1].bottom + positList[nodeIndex].height) : positList[nodeIndex].height;
-      }
-    })
-    if (needUpdate) {
-      setPositionCache(positList)
+  // 获取列表
+  const getList = async () => {
+    setLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 500))
+    const len: number = 200
+    const tmp = {
+      label: '',
+      value: -1,
     }
-    // eslint-disable-next-line
-  }, [scrollTop])
+    const res: ListItem[] = new Array(len)
+    for (let i = 0; i < len; i ++) {
+      const rand = Math.random()
+      let randStr = ''
+      if (rand < 0.2) randStr = new Array(Math.ceil(Math.random() + Math.random() + rand) * 100).fill('这').join("")
+      if (rand > 0.2 && rand < 0.6) randStr = '之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之之'
+      if (rand > 0.6) randStr = '田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田困田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田田'
+      res[i] = {...tmp}
+      res[i].label = `第 ${i + 1} 项` + randStr
+      res[i].value = i
+    }
+    setLoading(false)
+    setList(res)
+  }
 
+  // 视口偏移量计算
+  // 用来模拟滚动的
+  // 视口不存在全部数据，高度自然也不会和全部数据那么高
+  // 相对于整个列表高度而定位，这样在 list 滚动的时候
+  // 去改变定位位置和视口的数据，就好像滚动一样
   const getTransform = useCallback(() => {
-    // 这里做个偏移，这样在拉动过快时就不会出现白屏
-    return `translate3d(0,${startIndex >= 1 ? positionCache[startIndex - 1].bottom : 0}px,0)`
-  }, [positionCache, startIndex]);
+    return `translate3D(0, ${startIndex >= 1 ? positionCache[startIndex - 1].bottom : 0}px, 0)`
+  },[positionCache, startIndex])
 
   useEffect(() => {
     getList()
@@ -206,8 +169,9 @@ function VirtualList() {
 
   useEffect(() => {
     const positList: PostionCacheItem[] = [];
-    list.forEach((_, i) => {
+    list.forEach((item, i) => {
       positList[i] = {
+        ...item,
         index: i,
         height: defaultItemHeight,
         bottom: (i + 1) * defaultItemHeight,
@@ -216,17 +180,47 @@ function VirtualList() {
     setPositionCache(positList)
   }, [list])
 
+  useEffect(() => {
+    const nodeList = ViewRef?.current?.childNodes as NodeListOf<HTMLDivElement>;
+    const positList = [...positionCache]
+    let needUpdate = false;
+    nodeList?.forEach(node => {
+      // 节点的高度
+      const newHeight = node.getBoundingClientRect().height;
+      const nodeIndex = Number(node.dataset.index);
+      // 已经缓存了的节点高度
+      const oldHeight = positList[nodeIndex].height
+      // 已经缓存了的 bottom
+      const oldBottom = positList[nodeIndex].bottom
+      // 新的 bottom, 因为节点的高度可能改变了，所以 bottom 也要更新
+      const newBottom = nodeIndex > 0 ? positList[nodeIndex - 1].bottom + newHeight : newHeight
+      // 高度的差值
+      const dHeight = newHeight - oldHeight
+      // bottom 的差值
+      const dBottom = newBottom - oldBottom
+      // 只要有差值的时候才更新，主要是往回滚的时候
+      if (dHeight || dBottom) {
+        needUpdate = true
+        positList[nodeIndex].height = newHeight
+        positList[nodeIndex].bottom = newBottom
+        if (positList[positList.length - 1].bottom < newBottom) {
+          positList[positList.length - 1].bottom = newBottom
+        }
+      }
+      needUpdate && setPositionCache(positList)
+    })
+    // eslint-disable-next-line
+  }, [startIndex, ViewRef, positionCache])
+
+  // 渲染列表项
   const renderListItem = useCallback(() => {
     const rows = [];
     for (let i = startIndex; i <= endIndex; i++) {
       const item = list[i]
       rows.push(
-        <div 
-          className={style.listItem} 
-          data-index={item.value}
-          key={item.value}
-        >
-          {item.label}
+        <div className={style.listItem} key={item.value} data-index={item.value}>
+          <div>{i + 1}</div>
+          <div>{item.label}</div>
         </div>
       )
     }
@@ -238,7 +232,7 @@ function VirtualList() {
     <Spin spinning={loading}>
       <div className={style.container} ref={ContainerRef} style={{height: `${containerHeight}px`}} onScroll={handleScroll}>
         <div className={style.list} id="list" style={{height: `${listHeight}px`}}>
-          <div ref={ListRef} style={{ transform: getTransform()}}>
+          <div ref={ViewRef} style={{ transform: getTransform()}}>
             {renderListItem()}
           </div>
         </div>
