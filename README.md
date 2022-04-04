@@ -390,7 +390,7 @@ function VirtualList() {
     <>
       <div> {/*外层容器*/}
         <div> {/*列表容器，高度是全部数据的高度*/}
-          <div> {/*} 视口容器，只渲染部分数据，通过 transform 去配合滚动显示数据 */}
+          <div> {/* 视口容器，只渲染部分数据，通过 transform 去配合滚动显示数据 */}
           {/*视口容器没有动画的话，只数据变换过快时会发生闪烁*/}
             {renderListItem()}
           </div>
@@ -400,4 +400,56 @@ function VirtualList() {
   )
 }
 ```
-
+### 需要的变量/依赖
+- list 数组列表
+- positionCache 数组缓存列表，会记录 list 数组元素渲染后的高度等信息
+- listHeight 基于 list 列表的总高度，这样才能出现滚动条
+- startIndex 截取 list 数组元素的开始下标
+- limit 容器剩下还能放下多少个元素
+- endIndex 元素结束下标
+### 思路
+- 在 list 请求完后对 positionCache 进行初始化默认的高度和bottom
+```tsx
+// ... 其他代码
+useEffect(() => {
+  const positList: PostionCacheItem[] = [];
+  list.forEach((item, i) => {
+    positList[i] = {
+      ...item,
+      index: i,
+      height: defaultItemHeight,
+      bottom: (i + 1) * defaultItemHeight,
+    }
+  })
+  setPositionCache(positList)
+}, [list])
+```
+- 当 startIndex 改变或 positionCache 有更新时，需要重新更新 positionCache 里部分信息（如果需要的话）
+```tsx
+useEffect(() => {
+  const nodeList = ViewRef?.current?.childNodes as NodeListOf<HTMLDivElement>;
+  const positList = [...positionCache]
+  let needUpdate = false;
+  nodeList?.forEach(node => {
+    // ...计算逻辑
+  })
+  // eslint-disable-next-line
+}, [startIndex, ViewRef, positionCache])
+```
+- 更新 positionCache 信息后触发 list 高度的计算，limit 数量的计算，及 endIndex 的计算
+- 定义滚动事件，在滚动时，根据容器的 scrollTop 去计算 startIndex 的值，这样依赖 startIndex 的值会得到更新
+```tsx
+// 列表滚动时
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement, UIEvent> | Event) => {
+    if (e.target !== ContainerRef.current) return;
+    const ele = e.target as HTMLDivElement
+    const scrollTop = ele.scrollTop;
+    // 这里通过二分法查找 startIndex
+    const currentStartIndex = getStartIndex(scrollTop);
+    if (currentStartIndex !== startIndex) {
+      setStartIndex(currentStartIndex);
+    }
+    // eslint-disable-next-line
+  }, [ContainerRef, startIndex, positionCache])
+```
+- [参考文件](/src/views/VirtualList/index.tsx)
