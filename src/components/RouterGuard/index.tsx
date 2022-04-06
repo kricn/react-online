@@ -40,26 +40,22 @@ function RouteView ( {appStore}: any) {
     return (
       routes.map(item => {
         return (
-          <>
-            {
-              !item.component ? 
-                item.children?.length ? renderRoute(item.children) : '' :
-                (
-                  <Route
-                    {...item}
-                    key={item.path}
-                    path={item.path}
-                    element={
-                      renderElement(item)
-                    }
-                  >
-                    {/* 嵌套路由 */}
-                    {item.children?.length ? renderRoute(item.children) : ''}
-                  </Route>
-                )
-            }
-          </>
-        )
+          !item.component ? 
+            item.children?.length ? renderRoute(item.children) : '' :
+            (
+              <Route
+                {...item}
+                key={item.path}
+                path={item.path}
+                element={
+                  renderElement(item)
+                }
+              >
+                {/* 嵌套路由 */}
+                {item.children?.length ? renderRoute(item.children) : ''}
+              </Route>
+            )
+          )
       })
     )
   }
