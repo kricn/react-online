@@ -79,6 +79,30 @@ const menu:Array<RouteInterface> = [
       icon: HomeOutlined
     }
   },
+  {
+    path: '/layout',
+    // component: lazy(() => import('@/views/About')),
+    meta: {
+      title: '关于',
+      icon: HomeOutlined
+    },
+    children: [
+      {
+        path: '/layout/fall',
+        component: lazy(() => import('@/views/User')),
+        meta: {
+          title: '瀑布流'
+        }
+      },
+      {
+        path: '/layout/card-list',
+        component: lazy(() => import('@/views/User')),
+        meta: {
+          title: '卡片布局'
+        }
+      }
+    ]
+  },
   // {
   //   path: '/canvas',
   //   component: lazy(() => import('@/views/Canvas')),
