@@ -51,17 +51,4 @@ class LRUCache {
   }
 }
 
-const lru = new LRUCache()
-
-lru.put('/list/aaa', {a: '12', b: []})
-lru.put('/list/aba', {a: '4', b: [1]})
-lru.put('/list/aca', {a: '13', b: [2]})
-lru.put('/list/ada', {a: '19', b: [3]})
-lru.put('/list/addda', {a: '19', b: [3]})
-lru.put('/list/sdfa', {a: '19', b: [3]})
-
-console.log(lru.get('/list/aaa'))
-
-console.log(lru.getMap())
-
 export default LRUCache
