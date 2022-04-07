@@ -27,6 +27,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     padding: 10px;
+    height: calc(100vh - 64px);
     .contentInner {
       background-color: #fff;
       padding: 10px;
