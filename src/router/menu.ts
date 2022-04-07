@@ -81,24 +81,17 @@ const menu:Array<RouteInterface> = [
   },
   {
     path: '/layout',
-    // component: lazy(() => import('@/views/About')),
     meta: {
-      title: '关于',
+      title: '布局',
       icon: HomeOutlined
     },
     children: [
       {
         path: '/layout/fall',
-        component: lazy(() => import('@/views/User')),
+        component: lazy(() => import('@/views/Layout/Fall')),
         meta: {
-          title: '瀑布流'
-        }
-      },
-      {
-        path: '/layout/card-list',
-        component: lazy(() => import('@/views/User')),
-        meta: {
-          title: '卡片布局'
+          title: '瀑布流',
+          icon: HomeOutlined
         }
       }
     ]
