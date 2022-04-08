@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import style from './index.module.scss';
 
@@ -6,7 +6,7 @@ interface FallWrapperProps {
   column?: number  // 瀑布流列数
   children: JSX.Element[],
   height?: string  // 容器高度
-  getList: Function // 触发滚动加载
+  load: Function // 触发滚动加载
   isMore?: Boolean  // 是否还能继续加载
   offset?: number
 }
@@ -28,7 +28,12 @@ function FallWrapper (props: FallWrapperProps) {
   // 距离底部偏移量
   const offset = useMemo(() => props.offset || 100, [props.offset])
   // 是否还能继续加载
-  const isMore = useMemo(() => props?.isMore || true, [props.isMore])
+  const isMore = useMemo(() => typeof props?.isMore === 'boolean' ? props.isMore : true, [props.isMore])
+
+  const minColumnHeightRef = useRef<number>(0);
+  minColumnHeightRef.current = minColumnHeight
+  const isMoreRef = useRef<boolean>(true);
+  isMoreRef.current = isMore
 
   // 初始化列的子节点
   const columnChild = useMemo(() => {
@@ -92,9 +97,9 @@ function FallWrapper (props: FallWrapperProps) {
     const scrollTop = ele.scrollTop
     // 容器高度
     const containerHeight = ele.offsetHeight
-    if (scrollTop + containerHeight >= minColumnHeight - offset) {
-      props.getList()
-      if (!isMore) {
+    if (scrollTop + containerHeight >= minColumnHeightRef.current - offset) {
+      isMoreRef.current && props.load()
+      if (!isMoreRef.current) {
         const wrap = fallWrapperRef?.current
         wrap && wrap.removeEventListener('scroll', handleScrollTop)
       }
@@ -102,15 +107,17 @@ function FallWrapper (props: FallWrapperProps) {
   }
 
   // 判断滚动条触底
-  const getChontainerScroll = () => {
+  const getChontainerScroll = useCallback(() => {
     const wrap = fallWrapperRef?.current
     if (wrap) {
+      wrap && wrap.removeEventListener('scroll', handleScrollTop)
       wrap.addEventListener('scroll', handleScrollTop)
-      if (minColumnHeight - offset < wrap.offsetHeight && isMore) {
-        props.getList()
+      if (minColumnHeightRef.current - offset < wrap.offsetHeight && isMoreRef.current) {
+        props.load()
       }
     }
-  }
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     getChontainerScroll()
@@ -138,8 +145,14 @@ function Fall() {
   const [list, setList] = useState<ListInterface[]>([]);
   // 加载页数
   const [page, setPage] = useState<number>(1);
+  // 是否还能加载更多
+  const [isMore, setIsMore] = useState<boolean>(true);
 
-  const getList = () => {
+  const handlePageChange = useCallback(() => {
+    setPage(page => page + 1)
+  }, [])
+
+  useEffect(() => {
     const tmpList: ListInterface[] = []
     for (let i = pageSize * (page - 1); i < pageSize * page; i++) {
       let labelString = '某君昆仲，今隐其名，皆余昔日在中学时良友；分隔多年，消息渐阙。日前偶闻其一大病；适归故乡，迂道往访，则仅晤一人，言病者其弟也。劳君远道来视，然已早愈，赴某地候补⑵矣。因大笑，出示日记二册，谓可见当日病状，不妨献诸旧友。持归阅一过，知所患盖“迫害狂”之类。语颇错杂无伦次，又多荒唐之言；亦不著月日，惟墨色字体不一，知非一时所书。间亦有略具联络者，今撮录一篇，以供医家研究。记中语误，一字不易；惟人名虽皆村人，不为世间所知，无关大体，然亦悉易去。至于书名，则本人愈后所题，不复改也。七年四月二日识。'
@@ -153,18 +166,14 @@ function Fall() {
         value: i
       })
     }
-    setPage(page + 1)
     setList([...list, ...tmpList])
-  }
-
-  useEffect(() => {
-    getList()
+    if (page === 4) setIsMore(false)
     // eslint-disable-next-line
-  }, [])
+  }, [page])
 
   return (
     <div className={style.listContainer}>
-      <FallWrapper getList={getList}>
+      <FallWrapper load={handlePageChange} isMore={isMore}>
         {
           list.map(item => {
             return (
