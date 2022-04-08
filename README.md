@@ -7,7 +7,8 @@
 - [拖拽](#拖拽)
 - [Axios的封装和对请求进行缓存(LRU缓存)](#Axios的封装和对请求进行缓存(LRU缓存))
 - [Antd Form 组件常用表单的使用](#Form组件常用表单的使用)
-- 虚拟列表[#虚拟列表]
+- [虚拟列表](#虚拟列表)
+- [关于 useEffect 与 useState 值处理问题](#HOOKS小细节)
 ## 项目初始化 {#init}
 通过命令 npx create-react-app my-app --template typescript 创建项目  
 安装 craro，这样可以不暴露出 webpack 那些配置  
@@ -453,3 +454,9 @@ useEffect(() => {
   }, [ContainerRef, startIndex, positionCache])
 ```
 - [参考文件](/src/views/VirtualList/index.tsx)
+## HOOKS小细节
+### 问题点
+1、useEffect 产生的闭包问题，拿不到 useState 中已经改变的值？ 
+2、在 useEffect 中监听事件(一些会频繁触发的事件)，添加依赖数组会导致事件不断的监听和卸载，如何优化？ 
+3、监听事件的回调函数不能获取 useState 中(包括 useMemo 和 useCallback)已经改变的值该如何解决？ 
+
