@@ -459,4 +459,54 @@ useEffect(() => {
 1、useEffect 产生的闭包问题，拿不到 useState 中已经改变的值？ 
 2、在 useEffect 中监听事件(一些会频繁触发的事件)，添加依赖数组会导致事件不断的监听和卸载，如何优化？ 
 3、监听事件的回调函数不能获取 useState 中(包括 useMemo 和 useCallback)已经改变的值该如何解决？ 
+......... 
+- useEffect 默认会在每次 render 时执行一次（如果没有第二个参数的话），此时若在其中有定时器啥的，就会创建很多定时器，尽管有在卸载时清除定时器，但频繁的创建和销毁会造成资源的消耗
+
+- useEffect 执行时会产生一个闭包的作用域，即在执行时，作用域里的变量是什么值，之后就是什么值，所以 useEffect 可以值入一个依赖数组，在依赖数组中的值发生变化后，更新 useEffect 中的作用域得到最新的值，传入一个空数组，则表示在第一次渲染时执行一次(1)
+
+- useEffect 中想监听一些事件时，但传入一个空的依赖数组在初始化时监听，显然这时 useEffect 已经产生了闭包，在之后事件的回调中的值一直都是闭包里的值，不会以最新值去执行。解决方法是额外创建一个新的 ref 变量，用 ref 变量去记录更改的值，ref 是可以保留最新值的，不会因为多次渲染而丢失值(2,3)
+- [参考瀑布流的实现](/src/views/Layout/Fall/index.tsx)
+```tsx
+function App () {
+  const [conut, setCount] = useEfect<number>(0);
+  /** 创建useRef额外便令 */
+  /** 
+   * const CountRef = useRef<number>(0); 
+   * // 这样 CountRef 就会记录 count 的最新值，在函数里任何地方都能获取到 count 的最新值
+   * CountRef.current = count
+   * */
+
+  const handleClick = () => {
+    /** 使用 ref 优化
+     * 在事件初始化时创建一次监听就够了
+     * console.log(CountRef.current)
+     */
+    /** 优化时注释掉 */
+    console.log(count)
+  }
+
+  useEffect(() => {
+    const timer => setInterval(() => {
+      setCount(v => v + 1)
+    }, 1000)
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])  // 这里如果没有依赖数组，定时器会在视图更新时创建，在下一次试图更新前销毁
+
+  useEffect(() => {
+    document.addEventListener('click', handleClick)
+    return () => {
+      document.removeEventListener('click', handleClick)
+    }
+  }, []) // 同理，这时有空的依赖数组，则默认只在初始化的时候进行一次监听
+  // 当 count 的值改变后，点击网页，打印的值还是 0
+  // 若添加了 count 到依赖数组中，则每次 count 改变，useEffect 中就会每次移除事件的监听并生成新的作用域之后再次监听相同的事件 
+
+  return {
+    <div>{count}</div>
+  }
+}
+```
+
 
