@@ -96,6 +96,13 @@ const menu:Array<RouteInterface> = [
       }
     ]
   },
+  {
+    path: '/test',
+    component: lazy(() => import('@/views/Test')),
+    meta: {
+      hidden: true
+    }
+  }
   // {
   //   path: '/canvas',
   //   component: lazy(() => import('@/views/Canvas')),
