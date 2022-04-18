@@ -97,6 +97,23 @@ const menu:Array<RouteInterface> = [
     ]
   },
   {
+    path: '/design-patterns',
+    meta: {
+      title: '设计模式',
+      icon: HomeOutlined
+    },
+    children: [
+      {
+        path: '/esign-patterns/single',
+        component: lazy(() => import('@/views/Single')),
+        meta: {
+          title: '单例模式',
+          icon: HomeOutlined
+        }
+      }
+    ]
+  },
+  {
     path: '/test',
     component: lazy(() => import('@/views/Test')),
     meta: {
