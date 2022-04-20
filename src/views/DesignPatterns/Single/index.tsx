@@ -36,10 +36,10 @@ function Single() {
 
   return (
     <div>
-      <Button type="primary" onClick={() => setCount(val => val+1)}>点击增加</Button>
       <Button onClick={() => setVisible(val => !val)}>点击控制modal1显示/关闭</Button>
       <Button onClick={() => setVisible2(val => !val)}>点击控制modal2显示/关闭</Button>
       <Modal visible={visible}>
+        <Button type="primary" onClick={() => setCount(val => val+1)}>点击增加</Button>
         <div>modal 内容</div>
         <div>{count}</div>
       </Modal>

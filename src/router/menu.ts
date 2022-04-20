@@ -105,7 +105,7 @@ const menu:Array<RouteInterface> = [
     children: [
       {
         path: '/esign-patterns/single',
-        component: lazy(() => import('@/views/Single')),
+        component: lazy(() => import('@/views/DesignPatterns/Single')),
         meta: {
           title: '单例模式',
           icon: HomeOutlined
