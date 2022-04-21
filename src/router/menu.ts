@@ -23,14 +23,14 @@ const menu:Array<RouteInterface> = [
       icon: HomeOutlined
     }
   },
-  // {
-  //   path: '/animation',
-  //   component: lazy(() => import("@/views/Animation")),
-  //   meta: {
-  //     title: '动画',
-  //     icon: HomeOutlined
-  //   }
-  // },
+  {
+    path: '/animation',
+    component: lazy(() => import("@/views/Animation")),
+    meta: {
+      title: '动画',
+      icon: HomeOutlined
+    }
+  },
   // {
   //   path: '/about',
   //   component: lazy(() => import('@/views/About')),
