@@ -9,6 +9,8 @@
 - [Antd Form 组件常用表单的使用](#Form组件常用表单的使用)
 - [虚拟列表](#虚拟列表)
 - [关于 useEffect 与 useState 值处理问题](#HOOKS小细节)
+- [设计模式](#设计模式)
+  - [单例模式](#单例模式)
 ## 项目初始化 {#init}
 通过命令 npx create-react-app my-app --template typescript 创建项目  
 安装 craro，这样可以不暴露出 webpack 那些配置  
@@ -508,5 +510,7 @@ function App () {
   }
 }
 ```
+## 设计模式
+### 单例模式
 
 
