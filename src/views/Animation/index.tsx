@@ -1,52 +1,52 @@
 
 // import TransitionWrapper from './components/TransitionWrapper'
-import { useEffect, useRef, useState } from 'react'
+// import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { SwitchTransition, CSSTransition } from 'react-transition-group'
 import { Button } from 'antd'
 
 import style from './index.module.scss'
 
-interface AnimationInterface {
-  children: React.ReactElement
-  classNames?: string
+// interface AnimationInterface {
+//   children: React.ReactElement
+//   classNames?: string
 
-}
+// }
 
-const AnimationWrapper = (props: AnimationInterface) => {
+// const AnimationWrapper = (props: AnimationInterface) => {
 
-  const boxRef = useRef<HTMLDivElement>(null)
-  const [state, setState] = useState<"in" | "out">('in');
+//   const boxRef = useRef<HTMLDivElement>(null)
+//   const [state, setState] = useState<"in" | "out">('in');
 
-  useEffect(() => {
-    const animationName = props?.classNames
-    if (animationName) {
-      boxRef.current?.classList.remove(style[animationName + 'On'])
-      boxRef.current?.classList.add(style[animationName + 'On'])
-    }
-  }, [props.children])
+//   useEffect(() => {
+//     const animationName = props?.classNames
+//     if (animationName) {
+//       boxRef.current?.classList.add(state === 'in' ? style[animationName + 'On'] : style[animationName + 'Out'])
+//     }
+//   }, [props.children, state])
 
-  useEffect(() => {
-    boxRef.current?.addEventListener('animationend', () => {
-      console.log('a')
-    })
-  }, [])
+//   useEffect(() => {
+//     boxRef.current?.addEventListener('animationend', () => {
+//       console.log('a')
+//     })
+//   }, [])
   
-  return (
-    <div ref={boxRef}>{props.children}</div>
-  )
-}
+//   return (
+//     <div ref={boxRef}>{props.children}</div>
+//   )
+// }
 
 export default function Anaimation() {
   const [trigger, setTrigger] = useState<boolean>(true)
-  const [aTrigger, setATrriger] = useState<boolean>(true)
+  // const [aTrigger, setATrriger] = useState<boolean>(true)
 
   const toggleBoxStatus = () => {
     setTrigger(val => !val)
   }
 
-  const toogleABoxStatus = () => {
-    setATrriger(val => !val)
-  }
+  // const toogleABoxStatus = () => {
+  //   setATrriger(val => !val)
+  // }
 
   return (
     <div>
@@ -66,7 +66,7 @@ export default function Anaimation() {
           }
         </CSSTransition>
       </SwitchTransition>
-      <h1 className='mgt_30'>使用 css3 animation 实现 </h1>
+      {/* <h1 className='mgt_30'>使用 css3 animation 实现 </h1>
       <Button className='mgb_10' type='primary' onClick={toogleABoxStatus}>点击显示/隐藏</Button>
       <AnimationWrapper classNames="box">
         { aTrigger ? (<div className={`${style.box}`}>
@@ -74,7 +74,7 @@ export default function Anaimation() {
         </div>) : <div className={`${style.box}`}>
           ccc
         </div>}
-      </AnimationWrapper>
+      </AnimationWrapper> */}
     </div>
   )
 }
