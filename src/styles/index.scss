@@ -109,48 +109,24 @@ img {
   transition: all 500ms;
 }
 
-/** 渐隐-X 轴滑动 */
-.fade-sildeX-enter {
-  transform: translate(100%, 0);
-  opacity: 0;
-}
-
-.fade-sildeX-enter-active {
-  transform: translate(0, 0);
-  opacity: 1;
-  transition: all 300ms;
-}
-
-.fade-sildeX-exit {
-  transform: translate(0, 0);
-  opacity: 1;
-}
-
-.fade-sildeX-exit-active {
-  transform: translate(-100%, 0);
-  opacity: 0;
-  transition: all 300ms;
-}
-
-
 .slide-scale-enter {
-  transform: translate(-100%, -100%) scale(0);
+  transform: scale(0);
   opacity: 0;
 }
 
 .slide-scale-enter-active {
-  transform: translate(0, 0) scale(1);
+  transform: scale(1);
   opacity: 1;
   transition: all 300ms;
 }
 
 .slide-scale-exit {
-  transform: translate(0, 0) scale(1);
+  transform: scale(1);
   opacity: 1;
 }
 
 .slide-scale-exit-active {
-  transform: translate(-100%, -100%) scale(0);
+  transform: scale(0);
   opacity: 0;
   transition: all 300ms;
 }

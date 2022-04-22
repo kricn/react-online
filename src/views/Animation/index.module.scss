@@ -1,34 +1,40 @@
-.container {
-  .box {
-    width: 100px;
-    height: 100px;
-    background-color: aquamarine;
-  }
-  .redBox {
-    @extend .box;
-    background-color: brown;
-  }
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: aquamarine;
+}
+.redBox {
+  @extend .box;
+  background-color: brown;
+}
 
-  /** animation */
-  .box-enter {
-    transform: translate(100%, 0);
+.boxOn {
+  animation: slideScaleOn .3s ease;
+  animation-fill-mode: forwards;
+}
+.boxOut {
+  animation: slideScaleOut .3s ease;
+  animation-fill-mode: forwards;
+}
+
+/** animation */
+@keyframes slideScaleOn {
+  from {
+    transform: scale(0);
     opacity: 0;
   }
-  
-  .box-enter-active {
-    transform: translate(0, 0);
-    opacity: 1;
-    transition: all 500ms;
-  }
-  
-  .box-exit {
-    transform: translate(0, 0);
+  to {
+    transform: scale(1);
     opacity: 1;
   }
-  
-  .box-exit-active {
-    transform: translate(-100%, 0);
+}
+@keyframes slideScaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
     opacity: 0;
-    transition: all 500ms;
   }
 }

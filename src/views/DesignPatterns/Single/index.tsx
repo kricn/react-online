@@ -1,12 +1,13 @@
+
 import { Button } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
-interface ModalProps {
+interface SingleProps {
   visible: boolean
   children?: JSX.Element | JSX.Element[]
 }
 
-function Modal (props: ModalProps) {
+export function SingleWrapper (props: SingleProps) {
 
   const [mounted, setMounted] = useState<boolean>(false)
 
@@ -36,16 +37,16 @@ function Single() {
 
   return (
     <div>
-      <Button onClick={() => setVisible(val => !val)}>点击控制modal1显示/关闭</Button>
-      <Button onClick={() => setVisible2(val => !val)}>点击控制modal2显示/关闭</Button>
-      <Modal visible={visible}>
+      <Button onClick={() => setVisible(val => !val)}>点击控制Single1显示/关闭</Button>
+      <Button onClick={() => setVisible2(val => !val)}>点击控制Single2显示/关闭</Button>
+      <SingleWrapper visible={visible}>
         <Button type="primary" onClick={() => setCount(val => val+1)}>点击增加</Button>
-        <div>modal 内容</div>
+        <div>Single 内容</div>
         <div>{count}</div>
-      </Modal>
-      <Modal visible={visible2}>
-        <div>modal 内容2</div>
-      </Modal>
+      </SingleWrapper>
+      <SingleWrapper visible={visible2}>
+        <div>Single 内容2</div>
+      </SingleWrapper>
     </div>
   )
 }
