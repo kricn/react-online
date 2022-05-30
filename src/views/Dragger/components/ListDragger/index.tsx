@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 
-import style from '../index.module.scss'
+import style from './index.module.scss'
 import { deepCopy } from '@/utils'
 
 interface DragList {

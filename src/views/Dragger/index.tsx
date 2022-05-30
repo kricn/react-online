@@ -3,7 +3,7 @@ import React from 'react'
 
 import style from './index.module.scss'
 
-import DraggerList from './components/DraggerList'
+import DraggerList from './components/ListDragger'
 
 export default function Dragger() {
 

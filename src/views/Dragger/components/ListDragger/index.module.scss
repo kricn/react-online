@@ -1,0 +1,38 @@
+
+.list {
+  width: 300px;
+  text-align: center;
+  background-color: #eee;
+  padding: 20px;
+  .listItem {
+    background-color: #fff;
+    padding: 10px 0;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+}
+
+@keyframes dropUp {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropDown {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.drop-up{
+  animation: dropUp 0.3s ease forwards;
+}
+.drop-down{
+  animation: dropDown 0.3s ease forwards;
+}
