@@ -113,14 +113,14 @@ const menu:Array<RouteInterface> = [
       }
     ]
   },
-  {
-    path: '/pdf',
-    component: lazy(() => import('@/views/Pdf')),
-    meta: {
-      title: 'html转pdf',
-      icon: HomeOutlined
-    }
-  },
+  // {
+  //   path: '/pdf',
+  //   component: lazy(() => import('@/views/Pdf')),
+  //   meta: {
+  //     title: 'html转pdf',
+  //     icon: HomeOutlined
+  //   }
+  // },
   {
     path: '/test',
     component: lazy(() => import('@/views/Test')),
