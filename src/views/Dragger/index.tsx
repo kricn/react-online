@@ -4,6 +4,7 @@ import React from 'react'
 import style from './index.module.scss'
 
 import DraggerList from './components/ListDragger'
+import GridDragger from './components/GridDragger'
 
 export default function Dragger() {
 
@@ -27,6 +28,10 @@ export default function Dragger() {
       </div>
       <div className='mgb_20'>
         <DraggerList />
+      </div>
+
+      <div>
+        <GridDragger />
       </div>
       
     </>
