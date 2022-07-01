@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  display: inline-block;
+  background-color: aquamarine;
+  position: absolute;
+  left: 0;
+  top: 150px;
+}
+
+@keyframes move {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: 200px;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+.move {
+  animation: move 5s linear;
+}
