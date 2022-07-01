@@ -48,21 +48,27 @@ function SiderNav({ appStore }: any) {
     )
   }
   
-  // 渲染一级菜单
-  const renderFirstMenu = (route: RouteInterface) => {
+  
+  /**
+   * 渲染一级菜单
+   * @param route 路由数组
+   * @param showIcon 是否显示 icon
+   * @returns 
+   */
+  const renderFirstMenu = (route: RouteInterface, showIcon: boolean = true) => {
   
     return (
-      !route?.meta?.hidden ? <Menu.Item icon={route.meta?.icon ? <route.meta.icon /> : ''} key={route.path} onClick={() => navigate(route.path)}>{route?.meta?.title}</Menu.Item> : ''
+      !route?.meta?.hidden ? <Menu.Item icon={showIcon && route.meta?.icon ? <route.meta.icon /> : ''} key={route.path} onClick={() => navigate(route.path)}>{route?.meta?.title}</Menu.Item> : ''
     )
   }
   
-  // 渲染多级惨淡
+  // 渲染多级菜单
   const renderMultMenu = (subRoute: RouteInterface) => {
     return (
       <SubMenu title={subRoute.meta?.title} key={subRoute.path} icon={subRoute.meta?.icon ? <subRoute.meta.icon /> : ''}>
         {
           subRoute.children?.map(item => {
-            return renderFirstMenu(item)
+            return renderFirstMenu(item, false)
           })
         }
       </SubMenu>
