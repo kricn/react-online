@@ -1,4 +1,5 @@
 
+import { useAsyncState } from '@/components/UseAsyncState'
 import { Spin } from 'antd'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import style from './index.module.scss'
@@ -31,9 +32,9 @@ const containerHeight: number = 600
 function VirtualList() {
 
   // 列表
-  const [list, setList] = useState<ListItem[]>([])
+  const [list, setList] = useAsyncState<ListItem[]>([])
   // loading
-  const [loading, setLoading] = useState<boolean>(false)
+  const [loading, setLoading] = useAsyncState<boolean>(false)
   // 元素开始下标
   const [startIndex, setStartIndex] = useState<number>(0)
   // 缓存列表位置
@@ -63,7 +64,7 @@ function VirtualList() {
         break ;
       }
     }
-    // 返回填充下表的差值，并在容器外至少多渲染一个元素
+    // 返回填充下标的差值，并在容器外至少多渲染一个元素
     // 这样在一些高度刚好的情况下，滚动条不会因为触底而滚动不了
     return i - startIndex + 1
   }, [startIndex, positionCache])
@@ -95,7 +96,7 @@ function VirtualList() {
     let end: number = endIndex;
     let tmpIndex: number = 0;
     while (start <= end) {
-      // 批到终点
+      // 达到终点
       tmpIndex = Math.floor((end + start) >> 1)
       const midItem: PostionCacheItem = list[tmpIndex]
       const compareRes: number = compareValue(midItem?.bottom, value)
@@ -218,7 +219,7 @@ function VirtualList() {
     for (let i = startIndex; i <= endIndex; i++) {
       const item = list[i]
       rows.push(
-        <div className={style.listItem} key={item.value} data-index={item.value}>
+        <div className={style.listItem} key={item.value} data-index={item.value} data-bottom={positionCache[i].bottom}>
           <div>{i + 1}</div>
           <div>{item.label}</div>
         </div>
