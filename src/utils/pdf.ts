@@ -15,7 +15,7 @@ export function createPdfByElement(el: HTMLElement, title: string, nextPage?: bo
   html2Canvas(el, {
     allowTaint: true,
     scale: window.devicePixelRatio < 3 ? window.devicePixelRatio : 2
-  }).then(function (canvas) {
+  }).then(function (canvas: any) {
     const contentWidth = canvas.width;
     const contentHeight = canvas.height;
     const pageHeight = contentWidth / 592.28 * 841.89;
