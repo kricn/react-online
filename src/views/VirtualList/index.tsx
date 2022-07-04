@@ -88,15 +88,10 @@ function VirtualList() {
    // 二分查找
   const binarySearch = (list: PostionCacheItem[], value: number): number => {
     let start: number = 0
-    // 这里不能全列表找，因为列表可能有些值是没有更新的
-    // 这样会导致未更新的数据项和更新后的数据项在计算的时候冲突
-    // 比如前10个数据已经更新，第11条数据的 bottom 是680px 
-    // 但前10条的数据加起来已经超过680px,即使前10条中有一些项的bottom是超过680px的
-    // 这样在迭代过种中会出错，可能导致 startIndex 直接就冲到列表的最后去了
-    let end: number = endIndex;
+    let end: number = list.length - 1;
     let tmpIndex: number = 0;
     while (start <= end) {
-      // 达到终点
+      // 取中点
       tmpIndex = Math.floor((end + start) >> 1)
       const midItem: PostionCacheItem = list[tmpIndex]
       const compareRes: number = compareValue(midItem?.bottom, value)
@@ -161,11 +156,12 @@ function VirtualList() {
   // 相对于整个列表高度而定位，这样在 list 滚动的时候
   // 去改变定位位置和视口的数据，就好像滚动一样
   const getTransform = useCallback(() => {
-    return `translate3D(0, ${startIndex >= 1 ? positionCache[startIndex - 1].bottom : 0}px, 0)`
+    return `translate3D(0, ${startIndex > 0 ? positionCache[startIndex - 1].bottom : 0}px, 0)`
   },[positionCache, startIndex])
 
   useEffect(() => {
     getList()
+    // eslint-disable-next-line
   }, [])
 
   useEffect(() => {
@@ -219,7 +215,7 @@ function VirtualList() {
     for (let i = startIndex; i <= endIndex; i++) {
       const item = list[i]
       rows.push(
-        <div className={style.listItem} key={item.value} data-index={item.value} data-bottom={positionCache[i].bottom}>
+        <div className={style.listItem} key={item.value} data-index={item.value}>
           <div>{i + 1}</div>
           <div>{item.label}</div>
         </div>
