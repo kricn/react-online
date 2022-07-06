@@ -10,6 +10,9 @@ interface FileInfo {
 interface UserInfo {
   username?: string
   avatar?: FileInfo[]
+  uuid?: string
+  nickName?: string
+  headerImg?: string
 }
 
 interface Users {
@@ -26,19 +29,18 @@ class AppStore {
   @observable userInfo: UserInfo = {}  //当前登录用户信息
 
   // 切换用户状态
-  @action toggleLogin(info: UserInfo) {
+  @action toggleLogin(info: UserInfo, token: string = '') {
     this.userInfo = info  //设置登录用户信息
     // 给用户默认头像
     if (!this.userInfo.avatar) {
-      this.userInfo.avatar = [{url: require('@/assets/avatar.webp'), name: 'avatar'}]
+      this.userInfo.avatar = [{url: this.userInfo.headerImg || require('@/assets/avatar.webp'), name: 'avatar'}]
     }
-    if (this.userInfo.username) {
-      setToken('token', this.userInfo.username)
+    if (this.userInfo.uuid) {
       setToken('user-info', JSON.stringify(this.userInfo))
     } else {
-      removeToken('token')
       removeToken('user-info')
     }
+    token ? setToken('token', token) : removeToken()
   }
 }
 

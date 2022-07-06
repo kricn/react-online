@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import { inject, observer } from 'mobx-react'
 
@@ -9,18 +9,40 @@ import { RouteInterface } from '@/types/router'
 import { generateRoute } from './helper'
 
 import { getToken } from '@/utils/session'
+import { getUserInfo } from '@/api/user';
+import { useAsyncState } from '../UseAsyncState';
 
 
 function RouteView ( {appStore}: any) {
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useAsyncState(true)
+
+  const _getUserInfo = useCallback(async () => {
+    setLoading(true)
+    const res = await getUserInfo()
+    if (res.code === 1) {
+      console.log(res)
+      appStore.toggleLogin({...res.data}, getToken())
+    }
+    setLoading(false)
+    // eslint-disable-next-line
+  }, [])
 
   // 判断是否已经登录过
   useEffect(() => {
+    const token = getToken()
+    if (!token) {
+      setLoading(false)
+      return appStore.toggleLogin({})
+    }
     const userInfo = getToken('user-info') && JSON.parse(getToken('user-info'))
-    userInfo.username ? appStore.toggleLogin(userInfo) : appStore.toggleLogin({})
-    setLoading(false)
-  }, [loading, appStore])
+    if (userInfo.uuid) {
+      appStore.toggleLogin(userInfo, token)
+      setLoading(false)
+    }
+    if (!userInfo.uuid) _getUserInfo()
+    // eslint-disable-next-line
+  }, [appStore.userInfo.uuid])
 
   // 渲染路由对应的组件
   const renderElement = (route:RouteInterface):any => {
@@ -64,7 +86,7 @@ function RouteView ( {appStore}: any) {
     loading ? <LazyLoading /> :
     (
       <Routes>
-        { renderRoute(generateRoute(routers, !!appStore.userInfo?.username)) }
+        { renderRoute(generateRoute(routers, !!appStore.userInfo?.uuid)) }
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     )
