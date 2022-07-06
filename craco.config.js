@@ -4,7 +4,7 @@ const pathResolve = pathUrl => path.join(__dirname, pathUrl)
 
 const getProxy = (path = '') => {
   return {
-    target: path || 'http://localhost:8001',
+    target: path || 'http://localhost:1010',
     changeOrigin: true,
     pathRewrite: {
       "^/api": ''
