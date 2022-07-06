@@ -14,4 +14,11 @@
       width: 100%
     }
   }
+  .captcha {
+    width: 100px;
+    height: 32px;
+    flex-shrink: 0;
+    margin-left: 10px;
+    cursor: pointer;
+  }
 }
