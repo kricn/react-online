@@ -16,10 +16,7 @@ function Home() {
     const payload = {
       name: 'haha'
     }
-    const data = {
-      age: 18
-    }
-    const res = await testRequest(payload, data)
+    const res = await testRequest(payload)
     if (res.code === 1) {
       setList(res?.data)
     }

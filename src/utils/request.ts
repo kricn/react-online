@@ -1,7 +1,7 @@
 import qs from 'qs';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ResponseBody } from '@/types';
 import LRUCache from './LRUCache';
+import { getToken } from './session';
 
 // 请求缓存
 const cachePool = new Map<String, LRUCache>()
@@ -37,6 +37,11 @@ const Service = axios.create({
 //拦截器
 //请求拦截
 Service.interceptors.request.use(config => {
+  const token = getToken()
+  if (token) {
+    config.headers = config.headers || {}
+    config.headers.Authorization = `Bearer ${token}`
+  }
 	return config
 }, error => {
 	return Promise.reject(error)
@@ -70,17 +75,17 @@ interface RequestOptions {
 
 type Method = 'GET' | 'POST' | 'DELETE' | 'PUT'
 
-const request = (method: Method, path: string, params?: any, data?: any, options?: RequestOptions):Promise<any> => {
+const request = (method: Method, path: string, params?: any, options?: RequestOptions):Promise<any> => {
   const cacheItem = cachePool.get(path)
-  const key = [ method, path, qs.stringify(params), qs.stringify(data) ].join('&')
+  const key = [ method, path, qs.stringify(params) ].join('&')
   if (cacheItem?.get(key)) {
     return Promise.resolve(cachePool.get(path)?.get(key))
   }
   return Service({
     method,
     url: path,
-    params,
-    data,
+    params: method === 'GET' ? params : undefined,
+    data: method !== 'GET' ? params: undefined,
     headers: options?.headers,
     ...options,
   })
