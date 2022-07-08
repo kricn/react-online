@@ -20,6 +20,7 @@ function HeaderBar({ appStore }: any) {
 
   const menu = (
     <Menu>
+      <Menu.Item key="out" onClick={() => navigate("/user")}>个人中心</Menu.Item>
       <Menu.Item key="out" onClick={logout}>退出登录</Menu.Item>
     </Menu>
   );

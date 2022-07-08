@@ -28,7 +28,8 @@ const menu:Array<RouteInterface> = [
     component: lazy(() => import('@/views/User')),
     meta: {
       title: '个人中心',
-      icon: HomeOutlined
+      icon: HomeOutlined,
+      hidden: true
     }
   },
   {
