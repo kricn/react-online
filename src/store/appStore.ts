@@ -33,7 +33,7 @@ class AppStore {
     this.userInfo = info  //设置登录用户信息
     // 给用户默认头像
     if (!this.userInfo.avatar) {
-      this.userInfo.avatar = [{url: this.userInfo.headerImg || require('@/assets/avatar.webp'), name: 'avatar'}]
+      this.userInfo.avatar = [{url: '/api' + this.userInfo.headerImg || require('@/assets/avatar.webp'), name: 'avatar'}]
     }
     if (this.userInfo.uuid) {
       setToken('user-info', JSON.stringify(this.userInfo))
