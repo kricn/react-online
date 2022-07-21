@@ -1,3 +1,5 @@
+import config from '@/utils/config'
+
 const LOGIN_COOKIE_NAME = 'token'
 
 export function isAuthenticated () {
@@ -36,10 +38,9 @@ function _setCookie (name: string, value: string, expire: number=10) {
 }
 
 /** token 方法 */
-const LOGIN_TOKEN_NAME = 'token'
 
 export const getToken = (name?: string):string => {
-  return sessionStorage.getItem(name || LOGIN_TOKEN_NAME) || ''
+  return sessionStorage.getItem(name || config.tokenKey) || ''
 }
 
 export const setToken = (name: string, token:string) => {
@@ -47,5 +48,5 @@ export const setToken = (name: string, token:string) => {
 }
 
 export const removeToken = (name?: string) => {
-  sessionStorage.removeItem(name || LOGIN_TOKEN_NAME)
+  sessionStorage.removeItem(name || config.tokenKey)
 }

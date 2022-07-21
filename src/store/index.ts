@@ -1,8 +1,8 @@
-import appStore from './appStore'
+import UserInfo from './UserInfo'
 import testStore from './testStore'
 
 const store = {
-  appStore,
+  UserInfo,
   testStore
 }
 export default store
