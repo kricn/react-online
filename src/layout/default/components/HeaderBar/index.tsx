@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 // import { useAsyncState } from '@/components/UseAsyncState';
 const style = require('./index.module.scss').default
 
-function HeaderBar({ appStore }: any) {
+function HeaderBar({ UserInfo }: any) {
 
   const navigate = useNavigate()
 
   const logout = useCallback(() => {
-    appStore.toggleLogin({})
-  }, [appStore])
+    UserInfo.reset()
+  }, [UserInfo])
 
   const toEggs = useCallback(() => {
     navigate('/test')
@@ -29,10 +29,10 @@ function HeaderBar({ appStore }: any) {
     <div className={`flex fvertical ${style.header}`}>
       <Dropdown overlay={menu}>
         <div className='flex fvertical pointer'>
-          <div className={style.username}>{appStore.userInfo.username || '用户未登录'}</div>
+          <div className={style.username}>{UserInfo.user.username || '用户未登录'}</div>
           {/* <div className='note'></div> */}
           <div className={`${style.avatar} mgl_20`} onDoubleClick={toEggs}>
-            <img src={appStore.userInfo?.avatar ? appStore.userInfo.avatar[0].url : require("@/assets/avatar.webp")} alt="avatar" />
+            <img src={UserInfo.user?.avatar ? UserInfo.user.avatar[0].url : require("@/assets/avatar.webp")} alt="avatar" />
           </div>
         </div>
       </Dropdown>
@@ -40,4 +40,4 @@ function HeaderBar({ appStore }: any) {
   );
 }
 
-export default inject('appStore')(observer(HeaderBar));
+export default inject('UserInfo')(observer(HeaderBar));

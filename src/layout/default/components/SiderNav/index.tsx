@@ -11,7 +11,7 @@ import { Menu } from 'antd'
 const { SubMenu } = Menu
 
 
-function SiderNav({ appStore }: any) {
+function SiderNav({ UserInfo }: any) {
   
   const navigate = useNavigate()
   const location = useLocation()
@@ -74,7 +74,7 @@ function SiderNav({ appStore }: any) {
       </SubMenu>
     )
   }
-  return renderMenu(generateRoute(menus, !!appStore.userInfo?.username));
+  return renderMenu(generateRoute(menus, !!UserInfo.user?.username));
 }
 
-export default inject('appStore')(observer(SiderNav))
+export default inject('UserInfo')(observer(SiderNav))

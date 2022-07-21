@@ -22,7 +22,7 @@ import { observer } from 'mobx-react'
 import moment from 'moment'
 
 import style from './index.module.scss'
-import appStore from '@/store/appStore'
+import UserInfo from '@/store/UserInfo'
 
 const { Option } = Select
 
@@ -251,7 +251,7 @@ function User() {
     // 模拟提交请求
     await new Promise(resolve => setTimeout(resolve, 1000))
     // 更新用户信息
-    appStore.toggleLogin({
+    UserInfo.update({
       username: params.username,
       avatar: params.avatar
     })
@@ -272,10 +272,10 @@ function User() {
       const initValues = getFormInitValues()
       await new Promise(resolve => setTimeout(resolve, 500))
       // 模拟请求到的数据
-      initValues.username = appStore.userInfo.username
+      initValues.username = UserInfo.user.username
       // 设置头像
-      initValues.avatar = appStore.userInfo.avatar
-      setAvatar(appStore.userInfo.avatar ? appStore.userInfo.avatar[0].url : require('@/assets/avatar.webp'))
+      initValues.avatar = UserInfo.user.avatar
+      setAvatar(UserInfo.user.avatar ? UserInfo.user.avatar[0].url : require('@/assets/avatar.webp'))
       // 设置封面
       initValues.cover = [
         {url: require('@/assets/avatar.webp'), name: 'login.webp'}

@@ -1,10 +1,12 @@
 
-import { Form, Button, Input } from 'antd'
+import { Form, Button, Input, message } from 'antd'
 import { inject, observer } from 'mobx-react'
 import { useNavigate } from 'react-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
 import { useEffect, useState } from 'react';
+import { setToken } from '@/utils/session';
+import config from '@/utils/config'
 const style = require('./index.module.scss').default
 
 // 表单 col 大小
@@ -17,7 +19,7 @@ const rules = {
   code: [{required: true, message: '请输入验证码'}]
 }
 
-function Login({appStore}: any) {
+function Login({UserInfo}: any) {
 
   const [submitting, setSubmittin] = useState<boolean>(false)
   const [captcha, setCaptcha] = useState<string>('')
@@ -28,14 +30,18 @@ function Login({appStore}: any) {
   const onSubmit = async () => {
     const username = form.getFieldValue('username')
     if (username === 'root') {
-      appStore.toggleLogin({username, uuid: Date.now()}, username)
+      UserInfo.update({username, uuid: Date.now(), token: 'root'})
+      setToken(config.tokenKey, 'root')
       navigate('/')
     } else {
       setSubmittin(true)
       const res = await login(form.getFieldsValue())
       if (res.code === 1) {
-        appStore.toggleLogin({...res.data.userInfo}, res.data.token)
+        UserInfo.update({...res.data.userInfo}, res.data.token)
+        setToken(config.tokenKey, res.data.token)
         navigate('/')
+      } else {
+        message.error("账号或密码错误，没有开启后台服务可以使用账号 root 密码 root 登录")
       }
       setSubmittin(false)
     }
@@ -93,4 +99,4 @@ function Login({appStore}: any) {
   )
 }
 
-export default inject('appStore')(observer(Login))
+export default inject('UserInfo')(observer(Login))
