@@ -7,6 +7,7 @@ import { login } from '@/api/user'
 import { useEffect, useState } from 'react';
 import { setToken } from '@/utils/session';
 import config from '@/utils/config'
+import { useAsyncState } from '@/components/UseAsyncState';
 const style = require('./index.module.scss').default
 
 // 表单 col 大小
@@ -16,12 +17,14 @@ const labelCol = 4
 const rules = {
   username: [{required: true, message: '请输入用户名'}],
   password: [{required: true, message: '请输入密码'}],
-  code: [{required: true, message: '请输入验证码'}]
+  code: [{required: true, message: '请输入验证码'}],
 }
+
+let captchaId = ''
 
 function Login({UserInfo}: any) {
 
-  const [submitting, setSubmittin] = useState<boolean>(false)
+  const [submitting, setSubmittin] = useAsyncState<boolean>(false)
   const [captcha, setCaptcha] = useState<string>('')
 
   const [form] = Form.useForm()
@@ -35,7 +38,11 @@ function Login({UserInfo}: any) {
       navigate('/')
     } else {
       setSubmittin(true)
-      const res = await login(form.getFieldsValue())
+      const payload = {
+        ...form.getFieldsValue(),
+        captchaId
+      }
+      const res = await login(payload)
       if (res.code === 1) {
         UserInfo.update({...res.data.userInfo}, res.data.token)
         setToken(config.tokenKey, res.data.token)
@@ -49,7 +56,8 @@ function Login({UserInfo}: any) {
 
   const updateCaptrue = () => {
     const code = Date.now() + Math.random().toString(36).slice(2);
-    setCaptcha(`/api/captcha?sign=${code}`)
+    captchaId = code
+    setCaptcha(`/api/captcha?captchaId=${code}`)
   }
 
   useEffect(() => {
