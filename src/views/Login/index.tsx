@@ -7,7 +7,7 @@ import { login } from '@/api/user'
 import { useEffect, useState } from 'react';
 import { setToken } from '@/utils/session';
 import config from '@/utils/config'
-import { useAsyncState } from '@/components/UseAsyncState';
+import { useRequest } from 'ahooks';
 const style = require('./index.module.scss').default
 
 // 表单 col 大小
@@ -23,12 +23,31 @@ const rules = {
 let captchaId = ''
 
 function Login({UserInfo}: any) {
-
-  const [submitting, setSubmittin] = useAsyncState<boolean>(false)
   const [captcha, setCaptcha] = useState<string>('')
 
   const [form] = Form.useForm()
   const navigate = useNavigate()
+
+  const onLogin = (): Promise<ResponseBody> => {
+    const payload = {
+      ...form.getFieldsValue(),
+      captchaId
+    }
+    return login(payload)
+  }
+
+  const {loading: submitting, run: submitToLogin } = useRequest(onLogin, {
+    manual: true,
+    onSuccess: (res, params) => {
+      if (res.code === 1) {
+        UserInfo.update({...res.data.userInfo}, res.data.token)
+        setToken(config.tokenKey, res.data.token)
+        navigate('/')
+      } else {
+        message.error("账号或密码错误，没有开启后台服务可以使用账号 root 密码 root 登录")
+      }
+    }
+  })
 
   const onSubmit = async () => {
     const username = form.getFieldValue('username')
@@ -37,20 +56,7 @@ function Login({UserInfo}: any) {
       setToken(config.tokenKey, 'root')
       navigate('/')
     } else {
-      setSubmittin(true)
-      const payload = {
-        ...form.getFieldsValue(),
-        captchaId
-      }
-      const res = await login(payload)
-      if (res.code === 1) {
-        UserInfo.update({...res.data.userInfo}, res.data.token)
-        setToken(config.tokenKey, res.data.token)
-        navigate('/')
-      } else {
-        message.error("账号或密码错误，没有开启后台服务可以使用账号 root 密码 root 登录")
-      }
-      setSubmittin(false)
+      submitToLogin()
     }
   }
 

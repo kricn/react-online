@@ -2,7 +2,7 @@ const path = require('path')
 
 const pathResolve = pathUrl => path.join(__dirname, pathUrl)
 
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
+// const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 const getProxy = (path = '') => {
   return {
