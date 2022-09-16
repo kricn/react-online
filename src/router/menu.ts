@@ -41,7 +41,7 @@ const menu:Array<RouteInterface> = [
     children: [
       {
         path: '/ui/dragger',
-        component: lazy(() => import('@/views/Dragger')),
+        component: lazy(() => import('@/views/Ui/Dragger')),
         meta: {
           title: '拖拽',
           icon: HomeOutlined
@@ -58,7 +58,7 @@ const menu:Array<RouteInterface> = [
     children: [
       {
         path: '/performance/virtual-list',
-        component: lazy(() => import('@/views/VirtualList')),
+        component: lazy(() => import('@/views/Performance/VirtualList')),
         meta: {
           title: '虚拟列表',
           icon: HomeOutlined
@@ -66,7 +66,7 @@ const menu:Array<RouteInterface> = [
       },
       {
         path: '/performance/time-slice',
-        component: lazy(() => import('@/views/TimeSlice')),
+        component: lazy(() => import('@/views/Performance/TimeSlice')),
         meta: {
           title: '时间切片',
           icon: HomeOutlined
