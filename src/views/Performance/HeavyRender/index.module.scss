@@ -1,0 +1,45 @@
+.box {
+  width: 300px;
+  height: 500px;
+  overflow: auto;
+  padding: 0 10px;
+  background-color: #aaa;
+  .box-item {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #fff;
+  }
+}
+.animation-container {
+  width: 500px;
+  height: 500px;
+  background-color: #eee;
+  position: relative;
+  .animation-box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    animation: circle 3s infinite ease;
+  }
+}
+
+@keyframes circle {
+  0% {
+    left: 0; top: 0;
+  }
+  25% {
+    left: 400px; top: 0;
+  }
+  50% {
+    left: 400px; top: 400px;
+  }
+  75% {
+    left: 0; top: 400px;
+  }
+  100% {
+    left: 0; top: 0;
+  }
+}

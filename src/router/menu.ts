@@ -72,6 +72,14 @@ const menu:Array<RouteInterface> = [
           icon: HomeOutlined
         }
       },
+      {
+        path: '/performance/heavy-render',
+        component: lazy(() => import('@/views/Performance/HeavyRender')),
+        meta: {
+          title: '过度渲染优化',
+          icon: HomeOutlined
+        }
+      },
     ]
   },
   {
