@@ -35,7 +35,7 @@ function HeaderBar({ UserInfo }: any) {
           <div className={style.username}>{UserInfo.user.username || '用户未登录'}</div>
           {/* <div className='note'></div> */}
           <div className={`${style.avatar} mgl_20`} onDoubleClick={toEggs}>
-            <img src={UserInfo.user?.avatar ? UserInfo.user.avatar[0].url : require("@/assets/avatar.webp")} alt="avatar" />
+            <img src={UserInfo.user.avatar} alt="avatar" />
           </div>
         </div>
       </Dropdown>

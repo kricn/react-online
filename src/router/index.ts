@@ -4,6 +4,19 @@ import menu from './menu'
 
 import { RouteInterface } from '@/types/router'
 
+export const baseRouters = [
+  {
+    path: '/login',
+    component: lazy(() => import('@/views/Login')),
+  },
+  {
+    path: '/404',
+    component: lazy(() => import('@/views/404'))
+  }
+]
+
+export const whiteRouterList = baseRouters.map(item => item.path)
+
 const route: Array<RouteInterface> = [
   {
     path: '/',
@@ -13,14 +26,6 @@ const route: Array<RouteInterface> = [
     meta: {
       auth: true
     }
-  },
-  {
-    path: '/login',
-    component: lazy(() => import('@/views/Login')),
-  },
-  {
-    path: '/404',
-    component: lazy(() => import('@/views/404'))
   }
 ]
 

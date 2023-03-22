@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
-import routers from '@/router/index'
+import { baseRouters } from '@/router/index'
 import { RouteInterface } from '@/types/router'
 import { generateRoute } from './helper'
 import { inject, observer } from 'mobx-react';
@@ -42,16 +42,17 @@ const renderRoute:any = (routes:Array<RouteInterface>) => {
   )
 }
 
-function AllRoutes ({UserInfo}: any) {
+function AllRoutes ({ RouterInfo }: any) {
 
   return (
     (
-      <Routes>
-        { renderRoute(routers) }
+      RouterInfo.loading ? <LazyLoading /> : <Routes>
+        { renderRoute(generateRoute(RouterInfo.routers)) }
+        { renderRoute(baseRouters) }
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     )
   )
 }
 
-export default inject('UserInfo')(observer(AllRoutes));
+export default inject('RouterInfo')(observer(AllRoutes));

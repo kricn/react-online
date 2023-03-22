@@ -6,8 +6,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
 import { useEffect, useState } from 'react';
 import { setToken } from '@/utils/session';
-import config from '@/utils/config'
 import { useRequest } from 'ahooks';
+import { TOKEN_NAME } from '@/utils/constance';
 const style = require('./index.module.scss').default
 
 // 表单 col 大小
@@ -38,10 +38,10 @@ function Login({UserInfo}: any) {
 
   const {loading: submitting, run: submitToLogin } = useRequest(onLogin, {
     manual: true,
-    onSuccess: (res, params) => {
+    onSuccess: (res) => {
       if (res.code === 1) {
         UserInfo.update({...res.data.userInfo}, res.data.token)
-        setToken(config.tokenKey, res.data.token)
+        setToken(TOKEN_NAME, res.data.token)
         navigate('/')
       } else {
         message.error("账号或密码错误，没有开启后台服务可以使用账号 root 密码 root 登录")
@@ -53,7 +53,7 @@ function Login({UserInfo}: any) {
     const username = form.getFieldValue('username')
     if (username === 'root') {
       UserInfo.update({username, uuid: Date.now(), token: 'root'})
-      setToken(config.tokenKey, 'root')
+      setToken(TOKEN_NAME, 'root')
       navigate('/')
     } else {
       submitToLogin()
@@ -73,6 +73,7 @@ function Login({UserInfo}: any) {
       password: 'root',
       code: 'root'
     })
+    // eslint-disable-next-line
   }, [])
 
   return (

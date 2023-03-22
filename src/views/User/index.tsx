@@ -81,7 +81,7 @@ interface FormValues {
   address?: number[] | string[]
   date?: moment.Moment | null,
   customize?: string
-  avatar?: any[]
+  avatar?: string
   files?: any[]
   cover?: any[]
   agreement?: boolean,
@@ -94,7 +94,7 @@ const getFormInitValues = (values?: FormValues): FormValues => {
     address: [],
     date: null,
     customize: '',
-    avatar: [],
+    avatar: '',
     files: [],
     cover: [],
     agreement: false,
@@ -252,6 +252,7 @@ function User() {
     await new Promise(resolve => setTimeout(resolve, 1000))
     // 更新用户信息
     UserInfo.update({
+      ...UserInfo.user,
       username: params.username,
       avatar: params.avatar
     })
@@ -275,7 +276,7 @@ function User() {
       initValues.username = UserInfo.user.username
       // 设置头像
       initValues.avatar = UserInfo.user.avatar
-      setAvatar(UserInfo.user.avatar ? UserInfo.user.avatar[0].url : require('@/assets/avatar.webp'))
+      setAvatar(UserInfo.user.avatar ? UserInfo.user.avatar : require('@/assets/avatar.webp'))
       // 设置封面
       initValues.cover = [
         {url: require('@/assets/avatar.webp'), name: 'login.webp'}
