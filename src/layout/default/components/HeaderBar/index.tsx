@@ -8,11 +8,14 @@ const style = require('./index.module.scss').default
 
 function HeaderBar({ UserInfo }: any) {
 
+
   const navigate = useNavigate()
 
   const logout = useCallback(() => {
     UserInfo.reset()
-  }, [UserInfo])
+    navigate('/login', {replace: true})
+    // eslint-disable-next-line
+  }, [])
 
   const toEggs = useCallback(() => {
     navigate('/test')

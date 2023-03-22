@@ -68,6 +68,11 @@ function Login({UserInfo}: any) {
 
   useEffect(() => {
     updateCaptrue()
+    form.setFieldsValue({
+      username: 'root',
+      password: 'root',
+      code: 'root'
+    })
   }, [])
 
   return (

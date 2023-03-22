@@ -74,7 +74,7 @@ function SiderNav({ UserInfo }: any) {
       </SubMenu>
     )
   }
-  return renderMenu(generateRoute(menus, !!UserInfo.user?.username));
+  return renderMenu(generateRoute(menus));
 }
 
 export default inject('UserInfo')(observer(SiderNav))

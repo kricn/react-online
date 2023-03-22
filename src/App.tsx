@@ -1,9 +1,13 @@
-import RouteView from '@/components/RouterGuard';
 import './App.css';
+import RouterGuard from './components/RouterGuard';
+import AllRoutes from './components/RouterGuard/routers';
 
 function App() {
-
-  return <RouteView />
+  return (
+    <RouterGuard>
+      <AllRoutes />
+    </RouterGuard>
+  )
 }
 
 export default App
