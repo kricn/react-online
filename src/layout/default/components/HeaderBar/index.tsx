@@ -3,16 +3,18 @@ import { inject, observer } from 'mobx-react'
 import { Menu, Dropdown } from 'antd';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+// import RouterInfo from '@/store/RouterInfo';
 // import { useAsyncState } from '@/components/UseAsyncState';
 const style = require('./index.module.scss').default
 
-function HeaderBar({ UserInfo }: any) {
+function HeaderBar({ UserInfo, RouterInfo }: any) {
 
 
   const navigate = useNavigate()
 
   const logout = useCallback(() => {
     UserInfo.reset()
+    RouterInfo.reset()
     navigate('/login', {replace: true})
     // eslint-disable-next-line
   }, [])
@@ -43,4 +45,4 @@ function HeaderBar({ UserInfo }: any) {
   );
 }
 
-export default inject('UserInfo')(observer(HeaderBar));
+export default inject('UserInfo', 'RouterInfo')(observer(HeaderBar));

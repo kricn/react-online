@@ -20,7 +20,12 @@ class RouterInfo {
 
   // 切换用户状态
   @action update(info: Array<RouteInterface>) {
+    this.toggleLoading()
     this.routers = [...info]  //设置登录用户路由信息
+    new Promise<void>(resolve => setTimeout(() => {
+      this.toggleLoading()
+      resolve()
+    }, 300))
   }
   
   @action reset() {
