@@ -3,10 +3,10 @@ import { Routes, Route, Navigate } from 'react-router';
 
 import LazyLoading from '@/components/UnitComponent/LazyLoading';
 
-import routers, { baseRouters } from '@/router/index'
+import { baseRouters } from '@/router/index'
 import { RouteInterface } from '@/types/router'
 import { generateRoute } from './helper'
-import { inject, observer } from 'mobx-react';
+import { inject } from 'mobx-react';
 
 // 渲染路由对应的组件
 const renderElement = (route:RouteInterface):any => {
@@ -21,12 +21,13 @@ const renderElement = (route:RouteInterface):any => {
 const renderRoute:any = (routes:Array<RouteInterface>) => {
   return (
     routes.map(item => {
+      const { children, ...props } = item
       return (
         !item?.component ? 
           item.children?.length ? renderRoute(item.children) : '' :
           (
             <Route
-              {...item}
+              {...props}
               key={item.path}
               path={item.path}
               element={
@@ -43,7 +44,6 @@ const renderRoute:any = (routes:Array<RouteInterface>) => {
 }
 
 function AllRoutes ({ RouterInfo }: any) {
-
   return (
     (
       <Routes>

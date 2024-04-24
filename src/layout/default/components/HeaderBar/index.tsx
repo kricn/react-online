@@ -3,8 +3,6 @@ import { inject, observer } from 'mobx-react'
 import { Menu, Dropdown } from 'antd';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-// import RouterInfo from '@/store/RouterInfo';
-// import { useAsyncState } from '@/components/UseAsyncState';
 const style = require('./index.module.scss').default
 
 function HeaderBar({ UserInfo, RouterInfo }: any) {

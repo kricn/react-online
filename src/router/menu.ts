@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import { RouteInterface } from '@/types/router'
 
 import {
+  BlockOutlined,
   HomeOutlined
 } from '@ant-design/icons'
 
@@ -24,96 +25,27 @@ const menu:Array<RouteInterface> = [
     }
   },
   {
-    path: '/user',
-    component: lazy(() => import('@/views/User')),
+    path: '/embed',
     meta: {
-      title: '个人中心',
-      icon: HomeOutlined,
-      hidden: true
-    }
-  },
-  {
-    path: '/ui',
-    meta: {
-      title: "交互",
-      icon: HomeOutlined
+      title: '嵌套菜单',
+      icon: BlockOutlined
     },
     children: [
       {
-        path: '/ui/dragger',
-        component: lazy(() => import('@/views/Dragger')),
+        path: '/embed/embed-1',
+        component: lazy(() => import('@/views/Embed/Embed1')),
         meta: {
-          title: '拖拽',
-          icon: HomeOutlined
-        }
-      },
-    ]
-  },
-  {
-    path: '/performance',
-    meta: {
-      title: '性能优化',
-      icon: HomeOutlined
-    },
-    children: [
-      {
-        path: '/performance/virtual-list',
-        component: lazy(() => import('@/views/VirtualList')),
-        meta: {
-          title: '虚拟列表',
-          icon: HomeOutlined
-        }
+          title: '嵌套菜单1'
+        },
       },
       {
-        path: '/performance/time-slice',
-        component: lazy(() => import('@/views/TimeSlice')),
+        path: '/embed/embed-2',
+        component: lazy(() => import('@/views/Embed/Embed2')),
         meta: {
-          title: '时间切片',
-          icon: HomeOutlined
-        }
+          title: '嵌套菜单2'
+        },
       },
     ]
-  },
-  {
-    path: '/layout',
-    meta: {
-      title: '布局',
-      icon: HomeOutlined
-    },
-    children: [
-      {
-        path: '/layout/fall',
-        component: lazy(() => import('@/views/Layout/Fall')),
-        meta: {
-          title: '瀑布流',
-          icon: HomeOutlined
-        }
-      }
-    ]
-  },
-  {
-    path: '/design-patterns',
-    meta: {
-      title: '设计模式',
-      icon: HomeOutlined
-    },
-    children: [
-      {
-        path: '/esign-patterns/single',
-        component: lazy(() => import('@/views/DesignPatterns/Single')),
-        meta: {
-          title: '单例模式',
-          icon: HomeOutlined
-        }
-      }
-    ]
-  },
-  {
-    path: '/test',
-    component: lazy(() => import('@/views/Test')),
-    meta: {
-      hidden: true
-    }
   }
 ]
 

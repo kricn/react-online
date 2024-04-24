@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react'
 import { useNavigate } from 'react-router';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { login } from '@/api/user'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { setToken } from '@/utils/session';
 import { useRequest } from 'ahooks';
 import { TOKEN_NAME } from '@/utils/constance';
@@ -23,7 +23,6 @@ const rules = {
 let captchaId = ''
 
 function Login({UserInfo}: any) {
-  const [captcha, setCaptcha] = useState<string>('')
 
   const [form] = Form.useForm()
   const navigate = useNavigate()
@@ -60,14 +59,8 @@ function Login({UserInfo}: any) {
     }
   }
 
-  const updateCaptrue = () => {
-    const code = Date.now() + Math.random().toString(36).slice(2);
-    captchaId = code
-    setCaptcha(`/api/captcha?captchaId=${code}`)
-  }
 
   useEffect(() => {
-    updateCaptrue()
     form.setFieldsValue({
       username: 'root',
       password: 'root',
@@ -97,15 +90,6 @@ function Login({UserInfo}: any) {
               type="password"
               placeholder="请输入密码"
             />
-          </Form.Item>
-          <Form.Item name="code" label="验证码" rules={rules.code}>
-            <div className='flex'>
-              <Input
-                type="code"
-                placeholder="请输入验证码"
-              />
-              <img className={style.captcha} src={captcha} alt="验证码" onClick={updateCaptrue} />
-            </div>
           </Form.Item>
           <Form.Item>
             <Button block type="primary" htmlType="submit" loading={submitting}>
